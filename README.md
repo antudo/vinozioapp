@@ -1,0 +1,2 @@
+# vinozioapp
+phonegap application
