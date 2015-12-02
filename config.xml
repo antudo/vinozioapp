@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id = "com.vinozio" versionCode = "10" version="1.0.0">
+    <preference name="orientation" value="landscape" />
+    <preference name="fullscreen" value="true" />
+    <!-- versionCode is optional and Android only -->
+    <preference name="phonegap-version" value="3.5.0" />
+    
+    
+    <name>Vinozio</name>
+    
+    <description>
+        Vinozio
+    </description>
+    
+    <author href="https://www.vinozio.com" email="info@vinozio.com">
+        Vinozio.com
+    </author>
+    
+    <access origin="*" />
+    
+    <icon gap:platform="ios" height="57" src="www/ios/icon57.png" width="57" />
+    <icon gap:platform="ios" height="72" src="www/ios/icon72.png" width="72" />
+    <icon gap:platform="ios" height="114" src="www/ios/icon57-2x.png" width="114" />
+    <icon gap:platform="ios" height="144" src="www/ios/icon72-2x.png" width="144" />
+    <icon gap:platform="ios" height="152" src="www/ios/icon-152.png" width="152" />
+    <icon gap:platform="ios" height="76" src="www/ios/icon-76.png" width="76" />
+    
+    
+    <icon src="www/ios/icon-76.png" gap:platform="ios" width="76" height="76" />
+    <icon src="www/ios/icon-76@2x.png" gap:platform="ios" width="152" height="152" />
+    
+    <icon src="www/ios/icon-120.png" gap:platform="ios" width="120" height="120" />
+    <icon src="www/ios/icon-180.png" gap:platform="ios" width="180" height="180" />
+    
+    
+    
+    <splash src="www/Default-568h.png" />
+    <gap:splash src="www/320x480.png" width="320" height="480" />
+    <gap:splash src="www/480x800.png" width="480" height="800" />
+    <gap:splash src="www/720x1280.png" width="720" height="1280" />
+    <gap:splash src="www/1024x768.png" width="768" height="1024" />
+    <gap:splash gap:platform="ios" height="480" src="www/Default.png" width="320" />
+    <gap:splash gap:platform="ios" height="960" src="www/Default.png" width="640" />
+    <gap:splash gap:platform="ios" src="www/Default.png" />
+    <gap:splash gap:platform="ios" src="www/Default-568h.png"/>
+    <gap:splash gap:platform="ios" src="www/Default-568h@2.png"  />
+    
+    
+    <preference name="SplashScreen" value="screen" />
+    <preference name="AutoHideSplashScreen" value="false" />
+    <!-- Do not auto hide splash on Android -->
+    <preference name="SplashScreenDelay" value="10000"/>
+    <!--<preference name="Orientation" value="landscape" />-->
+    <gap:plugin name="org.apache.cordova.splashscreen" version="0.2.7" />
+    <gap:plugin name="org.apache.cordova.dialogs"  />
+    
+    <preference name="DisallowOverscroll" value="true"/>
+    <gap:plugin name="org.apache.cordova.inappbrowser" />
+    <gap:plugin name="nl.x-services.plugins.socialsharing" version="4.3.0" />
+    
+    
+    
+    
+</widget>
+

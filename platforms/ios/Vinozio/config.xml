@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.vinozio" version="1.0.0" versionCode="10" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+    <preference name="AllowInlineMediaPlayback" value="false" />
+    <preference name="AutoHideSplashScreen" value="true" />
+    <preference name="BackupWebStorage" value="cloud" />
+    <preference name="DisallowOverscroll" value="false" />
+    <preference name="EnableViewportScale" value="false" />
+    <preference name="FadeSplashScreen" value="true" />
+    <preference name="FadeSplashScreenDuration" value=".25" />
+    <preference name="KeyboardDisplayRequiresUserAction" value="true" />
+    <preference name="MediaPlaybackRequiresUserAction" value="false" />
+    <preference name="ShowSplashScreenSpinner" value="true" />
+    <preference name="SuppressesIncrementalRendering" value="false" />
+    <preference name="TopActivityIndicator" value="gray" />
+    <preference name="GapBetweenPages" value="0" />
+    <preference name="PageLength" value="0" />
+    <preference name="PaginationBreakingMode" value="page" />
+    <preference name="PaginationMode" value="unpaginated" />
+    <feature name="LocalStorage">
+        <param name="ios-package" value="CDVLocalStorage" />
+    </feature>
+    <feature name="SplashScreen">
+        <param name="ios-package" value="CDVSplashScreen" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="Notification">
+        <param name="ios-package" value="CDVNotification" />
+    </feature>
+    <preference name="orientation" value="landscape" />
+    <preference name="fullscreen" value="true" />
+    <preference name="phonegap-version" value="3.5.0" />
+    <name>Vinozio</name>
+    <description>
+        Vinozio
+    </description>
+    <author email="info@vinozio.com" href="https://www.vinozio.com">
+        Vinozio.com
+    </author>
+    <access origin="*" />
+    <icon gap:platform="ios" height="57" src="www/ios/icon57.png" width="57" />
+    <icon gap:platform="ios" height="72" src="www/ios/icon72.png" width="72" />
+    <icon gap:platform="ios" height="114" src="www/ios/icon57-2x.png" width="114" />
+    <icon gap:platform="ios" height="144" src="www/ios/icon72-2x.png" width="144" />
+    <icon gap:platform="ios" height="152" src="www/ios/icon-152.png" width="152" />
+    <icon gap:platform="ios" height="76" src="www/ios/icon-76.png" width="76" />
+    <icon gap:platform="ios" height="152" src="www/ios/icon-76@2x.png" width="152" />
+    <icon gap:platform="ios" height="120" src="www/ios/icon-120.png" width="120" />
+    <icon gap:platform="ios" height="180" src="www/ios/icon-180.png" width="180" />
+    <splash src="www/Default-568h.png" />
+    <gap:splash height="480" src="www/320x480.png" width="320" />
+    <gap:splash height="800" src="www/480x800.png" width="480" />
+    <gap:splash height="1280" src="www/720x1280.png" width="720" />
+    <gap:splash height="1024" src="www/1024x768.png" width="768" />
+    <gap:splash gap:platform="ios" height="480" src="www/Default.png" width="320" />
+    <gap:splash gap:platform="ios" height="960" src="www/Default.png" width="640" />
+    <gap:splash gap:platform="ios" src="www/Default.png" />
+    <gap:splash gap:platform="ios" src="www/Default-568h.png" />
+    <gap:splash gap:platform="ios" src="www/Default-568h@2.png" />
+    <preference name="SplashScreen" value="screen" />
+    <preference name="AutoHideSplashScreen" value="false" />
+    <preference name="SplashScreenDelay" value="10000" />
+    <gap:plugin name="org.apache.cordova.splashscreen" version="0.2.7" />
+    <gap:plugin name="org.apache.cordova.dialogs" />
+    <preference name="DisallowOverscroll" value="true" />
+    <gap:plugin name="org.apache.cordova.inappbrowser" />
+    <gap:plugin name="nl.x-services.plugins.socialsharing" version="4.3.0" />
+</widget>
