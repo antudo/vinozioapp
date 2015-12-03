@@ -193,6 +193,8 @@ function dom() {
         }
         console.log("WHERE:" + JSON.stringify(where));
         get_vini(where);
+        init_catalogo("", "1");
+
     }
     else {
         $('.tour').attr("data-dom", domande[step]);

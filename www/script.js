@@ -205,98 +205,14 @@ function init_cambia() {
 }
 
 
-function login_form(callback) {
-    stop_carica();
-    console.log("login form")
 
-    $(".voce_o").removeClass("voce_o");
-    loginDOM = '\
-	\
-	<div class="login">\
-		<div class="cover">\
-			<div class="center_log">\
-				<input type="email" />\
-				<input type="password" />\
-				<div class="signup">LOGIN</div>\
-			\
-		</div>\
-	</div>\
-	\
-	';
-    $('.content0').html(loginDOM);
+
+
+function start_app() {
+
+
 
     /*
-     if(window.localStorage.getItem("id_r") != "")
-     {
-     update_menu();
-     $('.content0').addClass("content0_log");
-     //init_profilo(id);
-     //SICCOME APRO IL CATALOGO:
-     $(".voce_o").removeClass("voce_o");
-     $('.voce[data-cont=tour]').addClass("voce_o");
-     init_tour();
-     }
-     */
-
-    $('.signup').bind("click", function (e) {
-        $('input').blur();
-        callback();
-        /*
-        $.ajax({
-            url: server_url + '/api/users/login',
-            type: "POST",
-            data: {
-                email: $('input[type=email]').val(),
-                password: $('input[type=password]').val()
-            },
-            success: function (dataString) {
-                console.log("AccessToken: " + dataString.id);
-                callback(dataString.id)
-            },
-            error: function (data) {
-                alert("Email or Password Incorrect.Cunnutu!")
-            }
-
-        })
-        */
-    })
-}
-
-
-function my_login() {
-
-
-    console.log("MYLOGIN");
-
-    login_form(function (accessToken) {
-
-        console.log("Callback from login" + accessToken)
-
-        /*
-        $.ajax({
-            url: server_url + '/api/storages',
-            type: "GET",
-            headers :  {
-                'Authorization' : accessToken
-            },
-            success: function (response) {
-                console.log("Response: " + JSON.stringify(response));
-                callback(dataString.id)
-            },
-            error: function (data) {
-                alert("Errore   ")
-            }
-        })
-          */
-        menu_close();
-        $('.content0').addClass("content0_log");
-        update_menu();
-        init_tour();
-        //startTour();
-        update_bind_cart();
-    });
-}
-function start_app() {
     db = window.openDatabase("Database", "1.0", "Cordova Demo", 200000);
     console.log("----DB-----", db);
     window.localStorage.setItem("lang", "ita");
@@ -313,6 +229,7 @@ function start_app() {
         update_bind_cart();
 
     });
+    */
 }
 function sync_db(surl, sdata) {
     if (surl != "" && sdata != "")
@@ -475,7 +392,8 @@ function porta_su() {
     });
 
 }
-function update_menu() {
+
+/*function update_menu() {
     $(".profile .foto").css("background-image", "url('" + window.localStorage.getItem("photo_r") + "')");
     $(".profile .name").html(window.localStorage.getItem("nome_r"));
     $('.voce').show();
@@ -491,7 +409,9 @@ function update_menu() {
 
 }
 var cont_vin;
+
 function menu_open(callback) {
+    console.log("MENU OPEN "+callback)
     if (typeof callback != "function")
         callback = function () {
         };
@@ -531,8 +451,8 @@ function menu_close(callback) {
     setTimeout(function () {
         $('.pd').fadeIn();
     }, 300);
-}
-function listnerEvents() {
+}*/
+/*function listnerEvents() {
 
 
     $('.header .btn').bind("tap", function (e) {
@@ -612,7 +532,7 @@ function listnerEvents() {
 
     });
 
-}
+}*/
 function fly_login() {
     flylogDOM = '<div class="boxVota">\
 	<p style="color:#9c243f;font-size: 20px;margin-top: 30px;margin-left:100px;">User</p>\
@@ -1406,10 +1326,6 @@ function init_ricerca(stringa) {
 }
 
 
-function get_vini(query) {
-    console.log("GET VINI"+JSON.stringify(query))
-}
-
 
 
 function init_catalogo(query, tour) {
@@ -1507,7 +1423,7 @@ function init_catalogo(query, tour) {
         filtrocolore = '<div class="filColori">' + fcoldiv + '</div>';
     }
 
-
+        console.log("DATI"+dati);
     leggi_db(dati, function (res) {
 
         if (tour != "1")
