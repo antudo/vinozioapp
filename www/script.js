@@ -1350,7 +1350,14 @@ function init_catalogo_(query, tour) {
         dati = "SELECT v.*, 'Lazio' as regione, n.nome as locazione, t.nome as tag FROM vini as v JOIN (SELECT g.id_vino as id,a.nome as nome FROM tag as a JOIN vini_tag as g ON(g.id_tag = a.id) WHERE LOWER(a.nome) LIKE 'vin%' ) as t ON (t.id=v.id) JOIN nazioni as n ON (v.loc= n.id) WHERE v.id != '0' GROUP BY v.id";
 
         filtrocolore = '<div class="filColori"><div class="legend">' + lingua[11] + '</div><div data-colore="' + lingua[12] + '" class="red selezione"></div><div data-colore="' + lingua[13] + '" class="white selezione"></div><div data-colore="' + lingua[14] + '" class="spum selezione"></div><div data-colore="' + lingua[15] + '" class="rosa selezione"></div></div>';
-    } else {
+    }
+
+
+
+
+
+
+    else {
         goback = '<div style="height:20px;"></div><div style="margin-left:20px;" class="goback">' + lingua[22] + '</div>';
         tag_ids = scelte.join(",");
         colore_vino = new Array();
@@ -1651,6 +1658,7 @@ function init_catalogo_(query, tour) {
                 }
 
             });
+/*
             $('.fbot div').not('.legend').unbind("tap").bind("tap", function (e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -1730,6 +1738,7 @@ function init_catalogo_(query, tour) {
                 }
 
             });
+*/
 
 
             leggi_db("SELECT * FROM nazioni WHERE id!=0", function (rest) {

@@ -7,6 +7,11 @@
 
 function init_catalogo(query, tour) {
 
+    var imported = document.createElement('script');
+    imported.src = 'js/filteringFunctions.js';
+    document.head.appendChild(imported);
+
+
     console.log("init_catalogo")
     update_bind_cart();
     refresh_bind();
@@ -17,6 +22,7 @@ function init_catalogo(query, tour) {
     };
 
     $('*').not(".header").not(".btn").not(".voce").unbind("tap");
+    filtrocolore = '<div class="filColori"><div class="legend">' + lingua[11] + '</div><div data-colore="' + lingua[12] + '" class="red selezione"></div><div data-colore="' + lingua[13] + '" class="white selezione"></div><div data-colore="' + lingua[14] + '" class="spum selezione"></div><div data-colore="' + lingua[15] + '" class="rosa selezione"></div></div>';
 
     var topbar = [
 

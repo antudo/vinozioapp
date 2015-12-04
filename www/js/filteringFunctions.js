@@ -96,17 +96,12 @@ $('.fbot div').not('.legend').unbind("tap").bind("tap", function (e) {
         pack += '1';
     else
         pack += '0';
-
     if (pack == '000')
         pack = '111';
-
     $('.fbot').attr('data-pack', pack);
-
     $('.vino').hide();
     if (pack == '111') {
-
         if ($('.filter').attr('data-fnaz') == '0') {
-
             $('.filColori div').not('.legend').each(function () {
                 if ($(this).hasClass("selezione"))
                     $('.vino[data-tag="' + $(this).attr("data-colore") + '"]').show();
@@ -114,11 +109,8 @@ $('.fbot div').not('.legend').unbind("tap").bind("tap", function (e) {
 
                     $('.vino').show();
             });
-
         }
         else {
-
-
             $('.filColori div').not('.legend').each(function () {
                 if ($(this).hasClass("selezione"))
                     $('.vino[data-naz=' + $('.filter').attr('data-fnaz') + '][data-tag="' + $(this).attr("data-colore") + '"]').show();
@@ -126,25 +118,19 @@ $('.fbot div').not('.legend').unbind("tap").bind("tap", function (e) {
 
                     $('.vino[data-naz=' + $('.filter').attr('data-fnaz') + ']').show();
             });
-
         }
     }
     else {
 
         if ($('.filter').attr('data-fnaz') == '0') {
-
             $('.filColori div').not('.legend').each(function () {
                 if ($(this).hasClass("selezione"))
                     $('.vino[data-pack="' + pack + '"][data-tag="' + $(this).attr("data-colore") + '"]').show();
                 if (!$('.red').hasClass('selezione') && !$('.white').hasClass('selezione') && !$('.spum').hasClass('selezione') && !$('.rosa').hasClass('selezione'))
-                //alert($(this).attr("data-colore"));
                     $('.vino[data-pack="' + pack + '"][data-tag="' + $(this).attr("data-colore") + '"]').show();
             });
-
-
         }
         else {
-
             $('.filColori div').not('.legend').each(function () {
                 if ($(this).hasClass("selezione"))
                     $('.vino[data-naz=' + $('.filter').attr('data-fnaz') + '][data-pack="' + pack + '"][data-tag="' + $(this).attr("data-colore") + '"]').show();
@@ -152,8 +138,9 @@ $('.fbot div').not('.legend').unbind("tap").bind("tap", function (e) {
                 //alert($(this).attr("data-colore"));
                     $('.vino[data-naz=' + $('.filter').attr('data-fnaz') + '][data-pack="' + pack + '"][data-tag="' + $(this).attr("data-colore") + '"]').show();
             });
-
         }
     }
-
 });
+
+
+
