@@ -2,11 +2,11 @@
 
 @font-face {
   font-family: "vinozio";
-  src:url("fonts/vinozio.eot");
-  src:url("fonts/vinozio.eot?#iefix") format("embedded-opentype"),
-    url("fonts/vinozio.woff") format("woff"),
-    url("fonts/vinozio.ttf") format("truetype"),
-    url("fonts/vinozio.svg#vinozio") format("svg");
+  src:url("../fonts/vinozio.eot");
+  src:url("../fonts/vinozio.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/vinozio.woff") format("woff"),
+    url("../fonts/vinozio.ttf") format("truetype"),
+    url("../fonts/vinozio.svg#vinozio") format("svg");
   font-weight: normal;
   font-style: normal;
 

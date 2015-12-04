@@ -4,23 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=1024, initial-scale=1, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <script src="cordova.js"></script>
-    <script src="jquery-1.11.1.min.js"></script>
     <link rel="apple-touch-icon" href="icon.png">
-    <script src="jquery.mobile.custom.min.js"></script>
-
-    <script src="script.js"></script>
-    <script src="js/login.js"></script>
-    <script src="js/eventListener.js"></script>
-    <script src="js/sidebarMenu.js"></script>
-    <script src="js/storageManager.js"></script>
-    <script src="js/catalogo.js"></script>
-    <script src="js/tour.js"></script>
-    <script src="js/APItoBackend.js"></script>
-
-    <link rel="stylesheet" href="fonts.css">
-    <link rel="stylesheet" href="flags32.css"/>
-    <link rel="stylesheet" href="style.css"/>
+    <link rel="stylesheet" href="css/fonts.css">
+    <link rel="stylesheet" href="css/flags32.css"/>
+    <link rel="stylesheet" href="css/style.css"/>
 </head>
 <body>
 <div class="cameriere">
@@ -33,22 +20,17 @@
 </div>
 <div class="btn-cart"></div>
 <div class="cartArea">
-
     <div class="pannello">
         <div class="titolo">I vini che hai ordinato</div>
         <div class="area">
-            <table data-tot="0" cellspacing="0" cellspadding="0" border="0">
-
-            </table>
+            <table data-tot="0" cellspacing="0" cellspadding="0" border="0"></table>
         </div>
-
         <div class="footer">
             <div class="ordina"></div>
             <div class="totaleStr">totale:</div>
             <div class="totaleVal">&euro; <span>10,00</span></div>
         </div>
     </div>
-
 </div>
 <div id="caricatore">
     <div id="loader">
@@ -102,15 +84,25 @@
             <div data-cont="cambia" class="voce icon-setting">
                 Inglese
             </div>
-
             <div data-cont="esci" class="voce icon-logout">
                 Esci
             </div>
         </div>
-
-
     </div>
-
 </div>
 </body>
+<script src="cordova.js"></script>
+<script src="js/jquery-1.11.1.min.js"></script>
+<script src="js/jquery.mobile.custom.min.js"></script>
+<script src="js/genericFunctions.js"></script>
+<script src="js/login.js"></script>
+<script src="js/eventListener.js"></script>
+<script src="js/sidebarMenu.js"></script>
+<script src="js/storageManager.js"></script>
+<script src="js/catalogo.js"></script>
+<script src="js/ristorante.js"></script>
+<script src="js/carrello.js"></script>
+<script src="js/tour.js"></script>
+<script src="js/APItoBackend.js"></script>
+
 </html>

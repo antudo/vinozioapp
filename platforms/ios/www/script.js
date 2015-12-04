@@ -205,94 +205,14 @@ function init_cambia() {
 }
 
 
-function login_form(callback) {
-    stop_carica();
-    console.log("login form")
 
-    $(".voce_o").removeClass("voce_o");
-    loginDOM = '\
-	\
-	<div class="login">\
-		<div class="cover">\
-			<div class="center_log">\
-				<input type="email" />\
-				<input type="password" />\
-				<div class="signup">LOGIN</div>\
-			\
-		</div>\
-	</div>\
-	\
-	';
-    $('.content0').html(loginDOM);
+
+
+function start_app() {
+
+
 
     /*
-     if(window.localStorage.getItem("id_r") != "")
-     {
-     update_menu();
-     $('.content0').addClass("content0_log");
-     //init_profilo(id);
-     //SICCOME APRO IL CATALOGO:
-     $(".voce_o").removeClass("voce_o");
-     $('.voce[data-cont=tour]').addClass("voce_o");
-     init_tour();
-     }
-     */
-
-    $('.signup').bind("click", function (e) {
-        $('input').blur();
-        $.ajax({
-            url: server_url + '/api/users/login',
-            type: "POST",
-            data: {
-                email: $('input[type=email]').val(),
-                password: $('input[type=password]').val()
-            },
-            success: function (dataString) {
-                console.log("AccessToken: " + dataString.id);
-                callback(dataString.id)
-            },
-            error: function (data) {
-                alert("Email or Password Incorrect.Cunnutu!")
-            }
-
-        })
-    })
-}
-
-
-function my_login() {
-
-
-    console.log("MYLOGIN");
-
-    login_form(function (accessToken) {
-
-        console.log("Callback from login" + accessToken)
-
-
-        $.ajax({
-            url: server_url + '/api/storages',
-            type: "GET",
-            headers :  {
-                'Authorization' : accessToken
-            },
-            success: function (response) {
-                console.log("Response: " + JSON.stringify(response));
-                callback(dataString.id)
-            },
-            error: function (data) {
-                alert("Errore   ")
-            }
-        })
-
-        menu_close();
-        $('.content0').addClass("content0_log");
-        update_menu();
-        init_tour();
-        update_bind_cart();
-    });
-}
-function start_app() {
     db = window.openDatabase("Database", "1.0", "Cordova Demo", 200000);
     console.log("----DB-----", db);
     window.localStorage.setItem("lang", "ita");
@@ -309,7 +229,9 @@ function start_app() {
         update_bind_cart();
 
     });
+    */
 }
+/*
 function sync_db(surl, sdata) {
     if (surl != "" && sdata != "")
         scrivi_db("INSERT INTO sync_db (url,data) VALUES ('" + surl + "','" + sdata + "')");
@@ -327,8 +249,9 @@ function sync_db(surl, sdata) {
         }
     });
 }
+*/
 
-function init_db(tables, callback) {
+/*function init_db(tables, callback) {
     tab_to_erase = new Array();
     scrivi_db("CREATE TABLE IF NOT EXISTS sync_db (id unique,url,data)");
     scrivi_db("DROP TABLE IF EXISTS vini");
@@ -463,7 +386,7 @@ function leggi_db(query, callback) {
         });
     });
 
-}
+}*/
 
 function porta_su() {
     menu_close(function () {
@@ -471,7 +394,8 @@ function porta_su() {
     });
 
 }
-function update_menu() {
+
+/*function update_menu() {
     $(".profile .foto").css("background-image", "url('" + window.localStorage.getItem("photo_r") + "')");
     $(".profile .name").html(window.localStorage.getItem("nome_r"));
     $('.voce').show();
@@ -487,7 +411,9 @@ function update_menu() {
 
 }
 var cont_vin;
+
 function menu_open(callback) {
+    console.log("MENU OPEN "+callback)
     if (typeof callback != "function")
         callback = function () {
         };
@@ -527,8 +453,8 @@ function menu_close(callback) {
     setTimeout(function () {
         $('.pd').fadeIn();
     }, 300);
-}
-function listnerEvents() {
+}*/
+/*function listnerEvents() {
 
 
     $('.header .btn').bind("tap", function (e) {
@@ -608,7 +534,7 @@ function listnerEvents() {
 
     });
 
-}
+}*/
 function fly_login() {
     flylogDOM = '<div class="boxVota">\
 	<p style="color:#9c243f;font-size: 20px;margin-top: 30px;margin-left:100px;">User</p>\
@@ -862,6 +788,10 @@ function log_default(asd) {
  });
  }
  */
+
+
+
+
 function log_admin(callback) {
     if (window.localStorage.getItem("rist_log") == "1") {
         $.ajax({
@@ -1129,9 +1059,13 @@ function init_profilo(_id) {
         });
     }
 }
+
+/*
 var step = 0;
 var scelte = new Array();
 var prezzo = 0;
+
+
 function init_tour() {
     $('.content0').html("");
     porta_su();
@@ -1177,8 +1111,8 @@ function init_tour() {
 	';
     $('.content0').html(tourDOM);
     $('.risposta').hide();
-    /*$('.risposta[data-dom='+domande[step]+']').show();
-     */
+    /!*$('.risposta[data-dom='+domande[step]+']').show();
+     *!/
     dom();
     $('.switch').removeClass("sel");
     $('.switch[data-dom=' + domande[step] + ']').addClass("sel");
@@ -1233,8 +1167,8 @@ function init_tour() {
                 }
                 $(this).addClass("sel");
             } else {
-                /*prezzo=$(this).attr('data-prez');
-                 init_catalogo("","1");*/
+                /!*prezzo=$(this).attr('data-prez');
+                 init_catalogo("","1");*!/
                 var index = prezzo.indexOf("'" + $(this).attr('data-prez') + "'");
                 if (index == -1) {
                     prezzo.push("'" + $(this).attr('data-prez') + "'");
@@ -1247,6 +1181,8 @@ function init_tour() {
     $('.risposta').unbind("tap").bind("tap", function (e) {
         e.preventDefault();
         e.stopPropagation();
+
+        console.log("DOMANDE"+domande[i])
         if ($(this).hasClass("sel")) {
             if (typeof $(this).attr('data-tag') != "undefined") {
                 var index = scelte.indexOf("'" + $(this).attr('data-tag') + "'");
@@ -1271,8 +1207,8 @@ function init_tour() {
                 }
                 $(this).addClass("sel");
             } else {
-                /*prezzo=$(this).attr('data-prez');
-                 init_catalogo("","1");*/
+                /!*prezzo=$(this).attr('data-prez');
+                 init_catalogo("","1");*!/
                 var index = prezzo.indexOf("'" + $(this).attr('data-prez') + "'");
                 if (index == -1) {
                     prezzo.push("'" + $(this).attr('data-prez') + "'");
@@ -1284,7 +1220,7 @@ function init_tour() {
                 if ($(this).hasClass("sel"))
                     flag++;
             });
-            if (flag == 1 /*&& step!=domande.length-1*/) {
+            if (flag == 1 /!*&& step!=domande.length-1*!/) {
                 step++;
                 if (step == 3)
                     step = 4;
@@ -1296,8 +1232,8 @@ function init_tour() {
         }
 
 
-        /*step++;
-         dom();*/
+        /!*step++;
+         dom();*!/
     });
     t = 0;
     indietro = function () {
@@ -1378,6 +1314,11 @@ function dom() {
         });
     }
 }
+*/
+
+
+
+
 function init_ricerca(stringa) {
     $('.searchbox').blur();
     carica();
@@ -1389,7 +1330,11 @@ function init_ricerca(stringa) {
     }, 150);
 
 }
-function init_catalogo(query, tour) {
+
+
+
+
+function init_catalogo_(query, tour) {
 
     update_bind_cart();
     refresh_bind();
@@ -1398,6 +1343,7 @@ function init_catalogo(query, tour) {
     };
     indietro = function () {
     };
+
     $('*').not(".header").not(".btn").not(".voce").unbind("tap");
     if (typeof query == "undefined" || query == "")
         query = "";
@@ -1410,7 +1356,14 @@ function init_catalogo(query, tour) {
         dati = "SELECT v.*, 'Lazio' as regione, n.nome as locazione, t.nome as tag FROM vini as v JOIN (SELECT g.id_vino as id,a.nome as nome FROM tag as a JOIN vini_tag as g ON(g.id_tag = a.id) WHERE LOWER(a.nome) LIKE 'vin%' ) as t ON (t.id=v.id) JOIN nazioni as n ON (v.loc= n.id) WHERE v.id != '0' GROUP BY v.id";
 
         filtrocolore = '<div class="filColori"><div class="legend">' + lingua[11] + '</div><div data-colore="' + lingua[12] + '" class="red selezione"></div><div data-colore="' + lingua[13] + '" class="white selezione"></div><div data-colore="' + lingua[14] + '" class="spum selezione"></div><div data-colore="' + lingua[15] + '" class="rosa selezione"></div></div>';
-    } else {
+    }
+
+
+
+
+
+
+    else {
         goback = '<div style="height:20px;"></div><div style="margin-left:20px;" class="goback">' + lingua[22] + '</div>';
         tag_ids = scelte.join(",");
         colore_vino = new Array();
@@ -1483,7 +1436,7 @@ function init_catalogo(query, tour) {
         filtrocolore = '<div class="filColori">' + fcoldiv + '</div>';
     }
 
-
+        console.log("DATI"+dati);
     leggi_db(dati, function (res) {
 
         if (tour != "1")
@@ -1636,6 +1589,7 @@ function init_catalogo(query, tour) {
             }
             catalogoDOM += "</div>";
             $('.content0').html(catalogoDOM);
+
             /* BIND FUNZIONI */
             $('.filColori div.selezione').removeClass('selezione');
             refresh_bind();
@@ -1710,6 +1664,7 @@ function init_catalogo(query, tour) {
                 }
 
             });
+/*
             $('.fbot div').not('.legend').unbind("tap").bind("tap", function (e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -1789,6 +1744,9 @@ function init_catalogo(query, tour) {
                 }
 
             });
+*/
+
+
             leggi_db("SELECT * FROM nazioni WHERE id!=0", function (rest) {
                 $('.filtra.naz').html('<div class="libera nazz">' + lingua[5] + '</div>');
                 for (i = 0; i < rest.rows.length; i++) {
@@ -1956,6 +1914,9 @@ function cameriere(indice) {
         });
     }
 }
+
+
+/*
 function onConfirm() {
 
     $('.sono').addClass('io');
@@ -2107,7 +2068,7 @@ function update_bind_cart() {
                 $('.cartArea table').attr('data-tot',
                     parseFloat(
                         $('.cartArea table').attr('data-tot') - (
-                            parseFloat($(this).attr('data-prezzo')) /* * $(this).attr('data-qnt') */
+                            parseFloat($(this).attr('data-prezzo')) /!* * $(this).attr('data-qnt') *!/
                         )
                     ).toFixed(2)
                 );
@@ -2118,6 +2079,12 @@ function update_bind_cart() {
         });
     });
 }
+*/
+
+
+
+
+
 function init_vino(_id) {
 
     update_bind_cart();
@@ -2466,7 +2433,7 @@ function init_vino(_id) {
         });
     });
 }
-function init_ristorante() {
+function init_ristorante_() {
     porta_su();
 
     leggi_db("SELECT * FROM ristoranti WHERE id='" + window.localStorage.getItem("id_r") + "'", function (dati) {
