@@ -1328,7 +1328,7 @@ function init_ricerca(stringa) {
 
 
 
-function init_catalogo(query, tour) {
+function init_catalogo_(query, tour) {
 
     update_bind_cart();
     refresh_bind();
@@ -1576,6 +1576,7 @@ function init_catalogo(query, tour) {
             }
             catalogoDOM += "</div>";
             $('.content0').html(catalogoDOM);
+
             /* BIND FUNZIONI */
             $('.filColori div.selezione').removeClass('selezione');
             refresh_bind();
@@ -1729,6 +1730,8 @@ function init_catalogo(query, tour) {
                 }
 
             });
+
+
             leggi_db("SELECT * FROM nazioni WHERE id!=0", function (rest) {
                 $('.filtra.naz').html('<div class="libera nazz">' + lingua[5] + '</div>');
                 for (i = 0; i < rest.rows.length; i++) {
