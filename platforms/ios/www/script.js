@@ -2488,7 +2488,7 @@ function init_vino(_id)
 									setTimeout(function(){
 										apri_cart();
 
-										$('.btn-a').css('background','none').css('color','#9f223f').html('ORDINAMI');
+										$('.btn-a').css('background','none').css('color','#9f223f').html('ORDINA');
 										$('.qnt').text('1');
 									}, 200);
 								}
