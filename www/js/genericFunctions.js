@@ -87,10 +87,10 @@ avanti = function () {
 };
 indietro = function () {
 };
-
+// aggiungere il deviceready
 $(document).ready(function () {
     console.log("----addEvent---")
-    my_login();
+    renderLoginPage();
     //start_app();
     //document.addEventListener("deviceready", start_app, false);
 });
@@ -237,10 +237,6 @@ function porta_su() {
     });
 
 }
-function init_login(callback) {
-    console.log("init_login");
-    callback();
-}
 function refresh_bind() {
     $('.vino').unbind("tap").bind("tap", function (e) {
         e.preventDefault();
@@ -265,7 +261,9 @@ function refresh_bind() {
 }
 
 function init_esci() {
-    window.localStorage.clear();
+    console.log("---INIT ESCI--- Chiamo Logout")
+    logout()
+    /*window.localStorage.clear();
     window.localStorage.setItem("id_r", "");
     window.localStorage.setItem("id", "");
     $('.btn-cart').hide();
@@ -282,6 +280,6 @@ function init_esci() {
 
         stop_carica();
         update_bind_cart();
-    });
+    });*/
 }
 

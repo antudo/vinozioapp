@@ -4,10 +4,14 @@
  * https://github.com/antoniodimariano/
  */
 function saveItem(item, value) {
+    console.log("[saveItem][item]:"+item + "value:"+value)
     localStorage.setItem(item, value);
+    console.log("VALORE"+localStorage.getItem("access_token"))
 }
 
 function getItem(item) {
+    console.log("GET ITEM: "+item)
+    console.log("VALORE: "+localStorage.getItem(item))
     return localStorage.getItem(item);
 }
 

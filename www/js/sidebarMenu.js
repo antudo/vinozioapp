@@ -7,6 +7,9 @@
  *
  */
 function update_menu() {
+
+    console.log("UPDATE MENU");
+
     $(".profile .foto").css("background-image", "url('" + window.localStorage.getItem("photo_r") + "')");
     $(".profile .name").html(window.localStorage.getItem("nome_r"));
     $('.voce').show();
@@ -30,20 +33,19 @@ function menu_open(callback) {
     if (typeof callback != "function")
         callback = function () {
         };
-    if (window.localStorage.getItem("id_r") != "") {
-        $(".menu").stop().animate({
-            "width": "17em"
-        }, 300, function () {
-            callback();
-        });
-        width = $(window).width() / parseFloat($("body").css("font-size"));
-        width -= 16;
-        $(".content0").stop().animate({
-            "padding-left": "16em",
-            "width": width + "em"
-        }, 300);
-        $('.pd').hide();
-    }
+    $(".menu").stop().animate({
+        "width": "17em"
+    }, 300, function () {
+        callback();
+    });
+    width = $(window).width() / parseFloat($("body").css("font-size"));
+    width -= 16;
+    $(".content0").stop().animate({
+        "padding-left": "16em",
+        "width": width + "em"
+    }, 300);
+    $('.pd').hide();
+
 }
 
 /**

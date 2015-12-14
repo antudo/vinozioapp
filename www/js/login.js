@@ -30,73 +30,124 @@ function login_form(callback) {
 	';
     $('.content0').html(loginDOM);
 
-    /*
-     if(window.localStorage.getItem("id_r") != "")
-     {
-     update_menu();
-     $('.content0').addClass("content0_log");
-     //init_profilo(id);
-     //SICCOME APRO IL CATALOGO:
-     $(".voce_o").removeClass("voce_o");
-     $('.voce[data-cont=tour]').addClass("voce_o");
-     init_tour();
-     }
-     */
+
 
     $('.signup').bind("click", function (e) {
         $('input').blur();
-        callback();
-        /*
-         $.ajax({
-         url: server_url + '/api/users/login',
-         type: "POST",
-         data: {
-         email: $('input[type=email]').val(),
-         password: $('input[type=password]').val()
-         },
-         success: function (dataString) {
-         console.log("AccessToken: " + dataString.id);
-         callback(dataString.id)
-         },
-         error: function (data) {
-         alert("Email or Password Incorrect.Cunnutu!")
-         }
-
-         })
-         */
+        var url = 'https://obscure-anchorage-5846.herokuapp.com/api/users/login';
+        var data = {
+            email: $('input[type=email]').val(), password: $('input[type=password]').val()
+        };
+        var accessToken = '';
+        loginRequest()
     })
 }
 
 /**
  *
  */
-function my_login() {
+function renderLoginPage() {
 
     console.log("MYLOGIN");
     initEvents()
     login_form(function (accessToken) {
         console.log("Callback from login" + accessToken)
-        /*
-         $.ajax({
-         url: server_url + '/api/storages',
-         type: "GET",
-         headers :  {
-         'Authorization' : accessToken
-         },
-         success: function (response) {
-         console.log("Response: " + JSON.stringify(response));
-         callback(dataString.id)
-         },
-         error: function (data) {
-         alert("Errore   ")
-         }
-         })
-         */
+
         menu_close();
         $('.content0').addClass("content0_log");
-        update_menu();
         init_tour();
         stop_carica();
         update_bind_cart();
     });
 }
+
+
+function renderHomePage() {
+    menu_close();
+    $('.content0').addClass("content0_log");
+    init_tour();
+    stop_carica();
+    update_bind_cart();
+}
+function isLogged() {
+    if (!(existItem("access_token"))) {  //attualmente il controllo verifica se esiste un cookie con key "access_token" e un altro con "userId"
+        window.location = 'login.html';  //ci sarebbe da controllare se i rispettivi valori sono validi (nel senso se sono autenticati dal server)
+    }                                     // in questo caso occorrerebbe concordare uno scambio di verifica client-server
+}
+
+function loginRequest() {
+
+    var url = 'https://obscure-anchorage-5846.herokuapp.com/api/users/login';
+    var data = {
+        email: $('input[type=email]').val(), password: $('input[type=password]').val()
+    };
+    var accessToken = '';
+    if (validateUserAndPass(data)) {
+        sendPOSTRequest(url, 'POST', data, accessToken, function (response) {
+            console.log("----[Callback from login]----" + response);
+            response_string = JSON.stringify(response)
+            decodedJson = JSON.parse(response_string);
+
+            console.log("----decodedJson----" + decodedJson.id)
+
+            if (decodedJson.hasOwnProperty('error')) {
+                loginFail(decodedJson);
+            } else if (decodedJson.hasOwnProperty('id') && decodedJson.hasOwnProperty('ttl')
+                && decodedJson.hasOwnProperty('created') && decodedJson.hasOwnProperty('userId')) {
+                loginSuccess(decodedJson);
+            } else {
+                loginFail(decodedJson);
+            }
+        });
+    } else {
+        loginFail();
+    }
+}
+
+function validateUserAndPass(data) {
+
+    if (validateEmail(data.email) && data.password.length > 4)
+        return true;
+    else
+        return false;
+
+}
+
+function validateEmail(email) {
+    var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+    return re.test(email);
+}
+
+function loginFail(decodedJson) {
+    alert("Email o password non corretti");// modificare per far apparire notifica in stile iOS
+
+}
+
+function logout() {
+    console.log("----------LOGOUT--------")
+    var value =    window.localStorage.getItem("access_token");
+    console.log("LOGOUT TOKEN---> "+value);
+
+    var url = 'https://obscure-anchorage-5846.herokuapp.com/api/users/logout';
+    var data = {};
+    var accessToken = value;
+
+    sendPOSTRequest(url, 'POST', data, accessToken, function (response) {
+        console.log("----[Callback from logout]----" + response);
+        deleteItem("access_token");
+        deleteItem("userId");
+        window.localStorage.clear();
+        localStorage.clear();
+        $('.btn-cart').hide();
+        $('.content0').removeClass("content0_log");
+        renderLoginPage()
+    });
+}
+
+function loginSuccess(decodedJson) {
+    console.log("LOGIN SUCCESS")
+    saveItem("access_token", decodedJson.id);
+    saveItem("userId", decodedJson.userId);
+    renderHomePage()
+}
+
