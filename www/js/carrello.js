@@ -3,6 +3,7 @@
  * email:antonio.dimariano@gmail.com
  * https://github.com/antoniodimariano/
  */
+store_product =[]
 function onConfirm() {
 
     $('.sono').addClass('io');
@@ -27,7 +28,7 @@ function onConfirm() {
         }
     }).done(function (asd) {
         $('.cartArea table').html('');
-        $('.totaleVal span').html('0.00');
+       // $('.totaleVal span').html('0.00');
         $('.cartArea table').attr('data-tot', "0");
         close_cart();
         stop_carica();
@@ -45,7 +46,7 @@ function onConfirm() {
         close_cart();
         stop_carica();
         $('.cartArea table').html('');
-        $('.totaleVal span').html('0.00');
+        //$('.totaleVal span').html('0.00');
         $('.cartArea table').attr('data-tot', "0");
         $('.ordina').unbind("tap");
         $('.sono').removeClass('io');
@@ -54,58 +55,37 @@ function onConfirm() {
 
 
 }
-function buy_cart() {
+/**
+ * issue: al momento si presenta questo errore quando la funzione viene invocata
+ * Uncaught TypeError: Cannot read property 'confirm' of undefined
+ *
+ */
+function buy_cart(products,total) {
+
+    console.log("----buy_cart "+products);
+    for(var i = 0; i<products.length;i++ ) {
+        console.log("PRODOTTI "+JSON.stringify(products[i]));
+    }
+    console.log("----buy_cart Total "+total);
+
+    var product_length = products.length;
+
+
+
+
+
     //if(confirm('Vuoi ordinare questi vini?')){
+
+    /*
     navigator.notification.confirm(
         'Vuoi ordinare questi vini?', // message
         cameriere,            // callback to invoke with index of button pressed
         'Vinozio',           // title
         'Si,No'     // buttonLabels
     );
+    */
 
 
-}
-function add_to_cart(nome, tipo, qnt, prezzo, id_v) {
-
-    if (nome.length > 25)
-        nome = nome.substr(0, 25) + "...";
-
-
-    var cartDOM = '<tr data-tipo="' + tipo + '" data-id-v="' + id_v + '" data-qnt="' + qnt + '" data-prezzo="' + parseFloat(parseFloat(prezzo).toFixed(2) * qnt).toFixed(2) + '">\
-		<td>' + nome + '</td>\
-		<td><div class="' + tipo + '"></div></td>\
-		<td><span class="cartQnt">' + qnt + '</span> x &euro; ' + parseFloat(prezzo).toFixed(2) + '</td>\
-		<td>&nbsp;</td>\
-	</tr>';
-
-    qntchiam = qnt;
-    if ($('.cartArea table tr[data-id-v="' + id_v + '"][data-tipo="' + tipo + '"]').length <= 0)
-        $('.cartArea table').append(cartDOM);
-    else {
-        oldqnt = $('.cartArea table tr[data-id-v="' + id_v + '"][data-tipo="' + tipo + '"]').attr('data-qnt');
-
-        qnt = (qnt * 1) + (oldqnt * 1);
-        oldprezzo = $('.cartArea table tr[data-id-v="' + id_v + '"][data-tipo="' + tipo + '"]').attr('data-prezzo');
-        newprezzo = (oldprezzo / oldqnt) * qnt;
-        $('.cartArea table tr[data-id-v="' + id_v + '"][data-tipo="' + tipo + '"]').attr('data-qnt', qnt);
-        $('.cartArea table tr[data-id-v="' + id_v + '"][data-tipo="' + tipo + '"]').attr('data-prezzo', newprezzo);
-        $('.cartArea table tr[data-id-v="' + id_v + '"][data-tipo="' + tipo + '"] .cartQnt').html(qnt);
-    }
-    qnt = qntchiam;
-    var tot = $('.cartArea table').attr('data-tot');
-    tot = parseFloat(
-        (
-
-            parseFloat(prezzo).toFixed(2) * qnt
-
-        ) + (tot * 1)
-    ).toFixed(2);
-    $('.cartArea table').attr('data-tot', tot);
-    $('.totaleVal span').text($('.cartArea table').attr('data-tot'));
-    $('.ordina').unbind("tap").bind("tap", function () {
-        buy_cart();
-    });
-    update_bind_cart();
 }
 function apri_cart() {
     console.log("apri_cart")
@@ -118,7 +98,8 @@ function close_cart() {
     $('.btn-cart').removeClass('sel');
 }
 function update_bind_cart() {
-    $('.totaleVal span').text($('.cartArea table').attr('data-tot'));
+    //$('.totaleVal span').text($('.cartArea table').attr('data-tot'));
+
     $('.btn-cart').unbind('tap').bind("tap", function (e) {
         e.preventDefault();
         e.stopPropagation();
@@ -166,4 +147,81 @@ function update_bind_cart() {
 
         });
     });
+}
+
+
+/**
+ *
+ * @param productToAdd
+ */
+function addToCart(productToAdd) {
+    console.log("---------addToCart"+JSON.stringify(productToAdd))
+    window.localStorage.setItem('addedToCart', JSON.stringify(productToAdd));
+    var tmp_cart = window.localStorage.getItem('addedToCart');
+
+    store_product.push(productToAdd);
+
+    var prodotto =JSON.parse(tmp_cart);
+    console.log("PRODOTTO "+prodotto.price)
+
+    renderCart(prodotto);
+
+}
+
+/**
+ *
+ * @param productJustAdded
+ */
+function renderCart(productJustAdded) {
+
+  /*
+   Formato di productJustAdded
+
+   {"product_size":"bottiglia","qty":"2","productId":"566ed23f7f669c03002e3741","price":25,"subtotal":50}
+   */
+    var product_size = productJustAdded.product_size;
+    var productId = productJustAdded.productId;
+    var qty = productJustAdded.qty;
+    var price = productJustAdded.price;
+    var subtotal = productJustAdded.subtotal;
+    var product_name = 'DA METTERE'
+    var totale='';
+
+    var cartDOM = '<tr data-tipo="' + product_size + '" data-id-v="' + productId + '" data-qnt="' + qty + '" data-prezzo="' + parseFloat(parseFloat(price).toFixed(2) * qty).toFixed(2) + '">\
+		<td>' + product_name + '</td>\
+		<td><div class="' + product_size + '"></div></td>\
+		<td><span class="cartQnt">' + qty + '</span> x &euro; ' + parseFloat(price).toFixed(2) + '</td>\
+		<td>&nbsp;</td>\
+	</tr>';
+
+
+    var partial_totale = window.localStorage.getItem('partial_cart_total');
+    if(!partial_totale) {
+        console.log("!partial_table")
+        partial_totale = subtotal;
+        window.localStorage.setItem('partial_cart_total',partial_totale)
+
+    } else {
+        console.log("TROVATO PARZIALE "+partial_totale)
+        var new_partial = Number(partial_totale) + Number(subtotal)
+        partial_totale = new_partial;
+        console.log("nuovo parziale "+partial_totale)
+        window.localStorage.setItem('partial_cart_total',Number(partial_totale))
+
+    }
+    console.log("TOTALE: "+partial_totale);
+    $('.cartArea table').append(cartDOM);
+
+    $('.totaleVal span').text(partial_totale);
+
+
+    $('.ordina').unbind("tap").bind("tap", function () {
+        var productsToBuy = window.localStorage.getItem('addedToCart');
+
+        buy_cart(store_product,partial_totale);
+    });
+    update_bind_cart();
+
+
+
 }

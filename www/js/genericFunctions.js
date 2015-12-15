@@ -90,6 +90,7 @@ indietro = function () {
 // aggiungere il deviceready
 $(document).ready(function () {
     console.log("----addEvent---")
+    window.localStorage.clear()
     renderLoginPage();
     //start_app();
     //document.addEventListener("deviceready", start_app, false);

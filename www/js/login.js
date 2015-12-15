@@ -50,6 +50,12 @@ function renderLoginPage() {
 
     console.log("MYLOGIN");
     initEvents()
+    loginRequest()
+    $('.content0').addClass("content0_log");
+    init_tour();
+    stop_carica();
+    update_bind_cart();
+/*
     login_form(function (accessToken) {
         console.log("Callback from login" + accessToken)
 
@@ -59,6 +65,7 @@ function renderLoginPage() {
         stop_carica();
         update_bind_cart();
     });
+*/
 }
 
 
@@ -78,8 +85,13 @@ function isLogged() {
 function loginRequest() {
 
     var url = 'https://obscure-anchorage-5846.herokuapp.com/api/users/login';
+   /*
     var data = {
         email: $('input[type=email]').val(), password: $('input[type=password]').val()
+    };
+    */
+    var data = {
+        email: "pepenero@gmail.com", password: "abcDEF9876"
     };
     var accessToken = '';
     if (validateUserAndPass(data)) {

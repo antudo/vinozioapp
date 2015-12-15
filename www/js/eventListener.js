@@ -60,6 +60,7 @@ function initEvents() {
         old = voce;
         voce = $(this).attr("data-cont");
         $(this).addClass("voce_o");
+        console.log("VOCE:"+voce);
         window['init_' + voce]();
         update_bind_cart();
         menu_close();

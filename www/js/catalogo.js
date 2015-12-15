@@ -4,7 +4,12 @@
  * https://github.com/antoniodimariano/
  */
 
-
+var prices = [] // hashTable to store prices associated to different product size
+/**
+ *
+ * @param query
+ * @param tour
+ */
 function init_catalogo(query, tour) {
     console.log("---------------------INIT CATALOGO--------------------------")
     var imported = document.createElement('script');
@@ -13,6 +18,7 @@ function init_catalogo(query, tour) {
 
     var access_token = window.localStorage.getItem("access_token");
     console.log("init_catalogo access_token---> " + access_token);
+    carica()
     update_bind_cart();
     refresh_bind();
     $('.vino').unbind("tap");
@@ -72,7 +78,7 @@ function init_catalogo(query, tour) {
         storage_products_decodedJson = JSON.parse(response_string);
         console.log("storage_products.length: " + storage_products.length)
         if (storage_products.length > 0) {
-            productEntry = [];
+            productEntry = ''; // ready to store HTML to render
             for (var i = 0; i < storage_products.length; i++) {
 
                 var retail_price = storage_products_decodedJson[i].retail_price;
@@ -82,15 +88,6 @@ function init_catalogo(query, tour) {
                 var year = storage_products_decodedJson[i].product.year;
                 var nation = 'Italy'; // to fix with nation number identification
 
-                /*
-
-                 console.log("PARAMS: " + retail_price)
-                 console.log("PARAMS: " + product_name)
-                 console.log("PARAMS: " + main_category)
-                 console.log("PARAMS: " + sub_category)
-                 console.log("PARAMS: " + year)
-                 console.log("PARAMS: " + nation)
-                 */
 
                 productEntry += '<div data-id="' + storage_products_decodedJson[i].id + '" data-tag="' + main_category + '" data-pack="110" data-naz="1" data-vino="273" class="vino">\
                  <p class="vino_nome">' + product_name + '</p>\
@@ -115,6 +112,7 @@ function init_catalogo(query, tour) {
                              <div class="pd"></div>\
                              <div class="ps"></div>';
             console.log("----------------CICLO FINITO. RENDER ")
+            stop_carica(); // stop loading
             $('.content0').html(topbar + container + productEntry + '</div>');
 
 
@@ -127,164 +125,374 @@ function init_catalogo(query, tour) {
                 e.preventDefault();
                 e.stopPropagation();
                 console.log("ID VINO--->" + $(this).attr("data-id"))
-                alert(e.target.getAttribute("data-id"));
+                //alert(e.target.getAttribute("data-id"));
+                showProductPage($(this).attr("data-id"))
                 //showVino(getVinoById(e.target.getAttribute("data-tag"), JSONResponse));
             });
 
 
         } else {
             productEntry = 'Nessun Prodotto presente in magazzino'
-            $('.content0').html(topbar + productEntry);
+            $('.content0').html(topbar + productEntry); //render HTML
         }
     })
+}
+/**
+ *
+ * @param options
+ * @returns {string}
+ */
+function buildProductDetails(options) {
+
+    console.log("OPTIONS" + options.vitigno)
 
 
-    /*
-     var products_list = [
+    var vitigno = options.vitigno || '';
+    var location = options.location || '';
+    var cantina = options.cantina || '';
+    var gradazione = options.gradazione || '';
+    var denominazione = options.denomination || '';
+    var tipo_vino = options.colvin || '';
 
-     '<div class="contenitore_vini">\
-     <div class="pd"></div>\
-     <div class="ps"></div>\
-     <div data-tag="Spumante" data-pack="110" data-naz="1" data-vino="273" class="vino">\
-     <p class="vino_nome">FRANCIACORTA BRUT CUVE...</p>\
-     <div class="clprezzo">€ 55,811</div>\
-     <div class="cluster dx">\
-     <div class="dettagli icon-glass"></div>\
-     <div class="dettagli">Spumante</div>\
-     </div>\
-     <div class="cluster ultimo dx anno">\
-     <div class="dettagli icon-annata"></div>\
-     <div class="dettagli">2005</div>\
-     </div>\
-     <div class="cluster">\
-     <div style="float:left;" class="dettagli flag n1"></div>\
-     <div class="dettagli">Italy</div>\
-     </div>\
-     <div class="clear"></div>\
-     </div>\
-     <div class="clear"></div>\
-     \
-     <div data-tag="Vino Bianco" data-pack="111" data-naz="1" data-vino="293" class="vino">\
-     <p class="vino_nome">Vino new Roman</p>\
-     <div class="clprezzo">€ 90,00</div>\
-     <div class="cluster dx">\
-     <div class="dettagli icon-glass"></div>\
-     <div class="dettagli">Vino Bianco</div>\
-     </div>\
-     <div class="cluster ultimo dx anno">\
-     <div class="dettagli icon-annata"></div>\
-     <div class="dettagli">1922</div>\
-     </div>\
-     <div class="cluster">\
-     <div style="float:left;" class="dettagli flag n1"></div>\
-     <div class="dettagli">Italy</div>\
-     </div>\
-     <div class="clear"></div>\
-     </div>\
-     <div class="clear"></div>\
-     <div data-tag="Vino Rosso" data-pack="111" data-naz="6" data-vino="297" class="vino">\
-     <p class="vino_nome">Vino San benedetto</p>\
-     <div class="clprezzo">€ 89,00</div>\
-     <div class="cluster dx">\
-     <div class="dettagli icon-glass"></div>\
-     <div class="dettagli">Vino Rosso</div>\
-     </div>\
-     <div class="cluster ultimo dx anno">\
-     <div class="dettagli icon-annata"></div>\
-     <div class="dettagli">1922</div>\
-     </div>\
-     <div class="cluster">\
-     <div style="float:left;" class="dettagli flag n6"></div>\
-     <div class="dettagli">Sud Africa</div>\
-     </div>\
-     <div class="clear"></div>\
-     </div>\
-     <div class="clear"></div>\
-     </div>\
-     '];
+    /**
+     * Costruisco le caratteristiche del prodotto
+     * @type {string}
      */
+    var product_details = '';
+    product_details += '<tr><td style="font-weight:400;">' + lingua[5] + '</td><td style="font-weight:200;">' + location + '</td></tr>';
+    product_details += '<tr><td style="font-weight:400;">' + lingua[11] + '</td><td style="font-weight:200;">' + tipo_vino + '</td></tr>';
+    product_details += '<tr><td style="font-weight:400;">' + lingua[6] + '</td><td style="font-weight:200;">' + cantina + '</td></tr>';
+    product_details += '<tr><td style="font-weight:400;">' + lingua[9] + '</td><td style="font-weight:200;">' + denominazione + '</td></tr>';
+    product_details += '<tr><td style="font-weight:400;">' + lingua[8] + '</td><td style="font-weight:200;">' + vitigno + '</td></tr>';
+    product_details += '<tr><td style="font-weight:400;">' + lingua[7] + '</td><td style="font-weight:200;">' + gradazione + '</td></tr>';
+
+    return product_details;
 
 
 }
+/**
+ *
+ * @param available_size
+ * @returns {string}
+ */
+function buildPricesForProductAvailableFormats(available_size) {
+    var format_price = '';
+    if (!available_size)
+        return format_price
+    for (var i = 0; i < available_size.length; i++) {
+        if (available_size[i].name == "calice") {
+            format_price += '<span class="calice_price">' + available_size[i].price + '</span>';
+            prices[available_size[i].name] = available_size[i].price;
+
+        }
+        /*
+        if (available_size[i].name == "bottiglia") {
+            format_price += '<span class="bottle_price">' + available_size[i].price + '</span>';
+
+        }
+        */
+        if (available_size[i].name == "mezzo") {
+            format_price += '<span class="half_price">' + available_size[i].price + '</span>';
+            prices[available_size[i].name] = available_size[i].price;
+        }
+    }
+    return format_price;
+
+}
+/**
+ *
+ * @param available_size
+ * @returns {string}
+ */
+function buildProductSizeDetails(available_size) {
+
+    var size = '';
+    if (!available_size)
+        return size
+
+    for (var i = 0; i < available_size.length; i++) {
+        if (available_size[i].name == "calice") {
+            size += '<div class="calice"></div>';
+            tipo = 'calice';
+        }
+        if (available_size[i].name == "bottiglia") {
+            size += '<div class="bottiglia"></div>';
+            tipo = 'bottiglia';
+        }
+        if (available_size[i].name == "mezzo") {
+            size += '<div class="mezzo"></div>';
+            tipo = 'mezzo';
+        }
+    }
+    return size;
+}
 
 
+/**
+ * todo: non dovrebbe essere + necessario mostrare il feedback, dato che non è previsto il voto.
+ * Chiedere per maggior conferma
+ */
+function buildFeedbackStars() {
+    /* vecchia procedura
+     for (j = 0; j < parseInt(rec.rows.item(i).voto); j++)
+     stelle += '<div data-icon="j" class="stella stella_p"></div>';
+     for (j = 0; j < (5 - parseInt(rec.rows.item(i).voto)); j++)
+     stelle += '<div data-icon="j" class="stella"></div>';
+
+     */
+    var stars = ''
+    for (var i = 0; i < 5; i++)
+        stars += '<div data-icon="j" class="stella stella_p"></div>';
+    for (var i = 0; i < 0; i++)
+        stars += '<div data-icon="j" class="stella"></div>';
+    return stars;
+}
+
+/**
+ *
+ * @param productId
+ */
 function showProductPage(productId) {
 
-    update_bind_cart();
-    $('.content0').html("");
-    porta_su();
-    for (i = 0; i < 5; i++)
-        stelle += '<div data-icon="j" class="stella stella_p"></div>';
-    for (i = 0; i < 0; i++)
-        stelle += '<div data-icon="j" class="stella"></div>';
-    var foto = "";
-    colvin = lingua[12];
+    console.log("[showProductPage]" + productId)
+    var access_token = window.localStorage.getItem("access_token");
+    console.log("init_catalogo access_token---> " + access_token);
+    var url = 'https://obscure-anchorage-5846.herokuapp.com/api/storages/' + productId + '?filter[include]=product';
+    var data = '';
+    var accessToken = access_token;
 
-    carat = "";
-    var locazione = ""
-    var anno = ""
-    var cantina = ""
-    var denominazione = ""
-    var vitigno = ""
-    var gradazione = ""
-    tipodisp = "";
-    /*
+    carica()
 
-     if (rows.item(0).pack[0] == "1") {
-     tipodisp += '<div class="bottiglia"></div>';
-     tipo = 'bottiglia';
-     }
-     if (rows.item(0).pack[1] == "1") {
-     tipodisp += '<div class="mezzo"></div>';
-     tipo = 'mezzo';
-     }
-     if (rows.item(0).pack[2] == "1") {
-     tipodisp += '<div class="calice"></div>';
-     tipo = 'calice';
-     }
-     */
+    sendPOSTRequest(url, 'GET', data, accessToken, function (storage_products) {
+        console.log("----[Callback from showProductPage]---- " + storage_products);
 
-    var prz = "";
+        response_string = JSON.stringify(storage_products)
+        storage_products_decodedJson = JSON.parse(response_string);
+
+        if (response_string.length > 0) {
+
+            var product_in_storage_id = storage_products_decodedJson.id;
+            var product_name = storage_products_decodedJson.product.name;
+            var location = "Italia";
+            var regione = "Sicilia";
+            var anno = storage_products_decodedJson.product.year || '';
+            var cantina = storage_products_decodedJson.product.cantina || '';
+            var denominazione = storage_products_decodedJson.product.denomitation;
+            var vitigno = storage_products_decodedJson.product.vitigno || '';
+            var gradazione = storage_products_decodedJson.product.proof || '';
+            var prezzo = storage_products_decodedJson.retail_price;
+            var formato_disponibile = storage_products_decodedJson.size;
+
+            prices['bottiglia'] = prezzo;
 
 
-    vinoDOM = '<div class="legno"><div class="tovaglia"><div class="gd"></div><div class="gs"></div></div></div><div class="contenitore_prodotto"><div class="prodotto"><div class="goback">' + lingua[22] + '</div>\
-					<h1>' + rows.item(0).nome + '</h1>\
+            console.log("FORMATO" + formato_disponibile)
+            var options = {
+                location: location,
+                denomination: denominazione,
+                cantania: cantina,
+                vitigno: vitigno,
+                gradazione: gradazione,
+                colvin: lingua[12]
+            }
+
+            product_details = buildProductDetails(options);
+            stars = buildFeedbackStars();
+            product_availability_format = buildProductSizeDetails(formato_disponibile);
+            format_prices = buildPricesForProductAvailableFormats(formato_disponibile);
+            var descrizione = storage_products_decodedJson.product.description;
+            colvin = lingua[12]; // capire perchè è sempre lingua[12]
+            var foto = "";
+
+            vinoDOM = '<div class="legno"><div class="tovaglia"><div class="gd"></div><div class="gs"></div></div></div><div class="contenitore_prodotto"><div class="prodotto"><div class="goback">' + lingua[22] + '</div>\
+					<h1>' + product_name + '</h1>\
 					<div class="cluster ultimo">\
-						<div class="dettagli flag n' + rows.item(0).loc + '"></div><div class="dettagli">' + rows.item(0).locazione + regione + '</div>\
+						<div class="dettagli flag n' + location + '"></div><div class="dettagli">' + location + regione + '</div>\
 					</div>\
 					<div class="cluster ultimo">\
 						<div class="dettagli icon-glass"></div><div class="dettagli">' + colvin + '</div>\
 					</div>\
 					<div class="cluster ultimo">\
-						<div class="dettagli icon-annata"></div><div class="dettagli">' + rows.item(0).anno + '</div>\
+						<div class="dettagli icon-annata"></div><div class="dettagli">' + anno + '</div>\
 					</div>\
 					<div class="clear"></div>\
 					<div class="line"></div>\
 					<div class="acquisto">\
-						<div class="prezzi">&euro; <span class="prezBot">' + rows.item(0).prezzo + '</span>' + prz + '</div>\
+						<div class="prezzi">&euro; <span class="bottle_price">' + prezzo + '</span>' + format_prices + '</div>\
 						\
 						<div class="clear"></div>\
-						<div class="fbot" style="float:left;margin-top:20px;">' + tipodisp + '</div>\
-						<div class="btn-qnt"><div class="men" style="float: left;margin-left: 20px;font-size: 20px;width:50px;">-</div>\
+						<div class="fbot" style="float:left;margin-top:20px;">' + product_availability_format + '</div>\
+						<div class="btn-qnt"><div class="minus_icon" style="float: left;margin-left: 20px;font-size: 20px;width:50px;">-</div>\
 						<div class="qnt" style="float: left;text-align: center;width: 40px;">1</div>\
-						<div class="piu" style="float: right;margin-right: 20px;font-size: 20px;width:50px;">+</div></div>\
-						<div data-id="' + rows.item(0).id + '" class="btn-a">' + lingua[23] + '</div>\
+						<div class="plus_icon" style="float: right;margin-right: 20px;font-size: 20px;width:50px;">+</div></div>\
+						<div data-id="' + product_in_storage_id + '" class="btn-a">' + lingua[23] + '</div>\
 					</div>\
-					<div class="clear"></div><!--\
+					<div class="clear"></div>\
 					<div class="stelle">\
-						' + stelle + '\
+						' + stars + '\
 					</div>\
-					<div class="clear"></div>-->\
+					<div class="clear"></div>\
 					' + foto + '\
 					<div class="caratteristiche">\
 						<table style="width:100%;">\
-							' + carat + '\
+							' + product_details + '\
 						</table>\
 					</div>\
 					<div class="clear"></div>\
 					<div class="descrizione">\
-						' + rows.item(0).desc + '\
+						' + descrizione + '\
 					</div>\
 					<div class="clear"></div>\
 					</div></div>';
+
+        } else {
+            vinoDOM = '<div class="legno"><div class="tovaglia"><div class="gd"></div><div class="gs"></div></div></div><div class="contenitore_prodotto"><div class="prodotto"><div class="goback">' + lingua[22] + '</div>\
+					<h1>No more information available</h1>\
+					<div class="clear"></div>\
+					</div></div>'
+
+        }
+        stop_carica();
+        $('.content0').html(vinoDOM);
+        var product_selected=[];
+        update_bind_cart();
+        porta_su();
+        bindGoBackButton();
+        bindProductQtyButtons();
+        bindOrderNowButton();
+        bindProductSizeButtons();
+
+    })
+
+}
+/**
+ *
+ */
+function bindGoBackButton() {
+    console.log("[bindGoBackButton]");
+    $('.goback').unbind("tap").bind("tap", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        init_catalogo();
+        refresh_bind();
+    });
+}
+/**
+ *
+ */
+function bindProductQtyButtons() {
+    console.log("[bindProductQtyButtons]")
+
+
+    $('.minus_icon').unbind("tap").bind("tap", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (parseInt($('.qnt').text()) > 1)
+            $('.qnt').text(parseInt($('.qnt').text()) - 1);
+    });
+
+    $('.plus_icon').unbind("tap").bind("tap", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (parseInt($('.qnt').text()) < 10)
+            $('.qnt').text(parseInt($('.qnt').text()) + 1);
+    });
+}
+
+/**
+ * todo : capire se possono esserci selezioni multiple
+ *  if (pack == '000')
+            pack = '111';
+    if (pack == '111') {
+            console.log("PACK 111 "+pack)
+        }
+ */
+function bindProductSizeButtons() {
+    $('.fbot div').not('.legend').unbind("tap").bind("tap", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        refresh_bind();
+        $(this).toggleClass("sel");
+        var pack = '';
+        var tipo = [];
+        pack += '0';
+
+        if ($('.fbot .bottiglia').hasClass('sel')) {
+            tipo.push("bottiglia");
+            $('.fbot .mezzo').removeClass('sel');
+            $('.fbot .calice').removeClass('sel');
+
+        }
+        if ($('.fbot .mezzo').hasClass('sel')) {
+            tipo.push("mezzo")
+            $('.fbot .bottiglia').removeClass('sel');
+            $('.fbot .calice').removeClass('sel');
+
+        }
+        if ($('.fbot .calice').hasClass('sel')) {
+            tipo.push("calice")
+            $('.fbot .mezzo').removeClass('sel');
+            $('.fbot .bottiglia').removeClass('sel');
+        }
+        $('.fbot').attr('data-pack', pack);
+        $('.vino').hide();
+        console.log("TIPO: " + tipo );
+        product_selected = tipo;
+
+    })
+}
+/**
+ * todo: da inserire la logica per inserire l'ordine nel carrello
+ */
+function bindOrderNowButton() {
+    $('.btn-a').unbind("tap").bind("tap", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        var productId = $(this).attr("data-id");
+        var qtyToOrder = $('.qnt').text();
+
+
+        var order_to_add = {
+            "product_size" : product_selected[0],
+            "qty":qtyToOrder,
+            "productId":productId,
+            price : prices[product_selected[0]],
+            subtotal : prices[product_selected[0]] * qtyToOrder
+
+
+        }
+
+
+        console.log("order_to_add: "+JSON.stringify(order_to_add))
+        addToCart(order_to_add);
+        $('.btn-a').css('background', '#9f223f').css('color', '#fff').html('AGGIUNTO');
+
+        setTimeout(function () {
+            apri_cart();
+
+            $('.btn-a').css('background', 'none').css('color', '#9f223f').html('ORDINA');
+            $('.qnt').text('1');
+        }, 200);
+
+
+        /*if (tipo != "") {
+         if (tipo == "bottiglia")
+         add_to_cart(rows.item(0).nome, tipo, qnt, rows.item(0).prezzo, id_vin);
+         else if (tipo == "calice")
+         add_to_cart(rows.item(0).nome, tipo, qnt, rows.item(0).prezzo_cal, id_vin);
+         else
+         add_to_cart(rows.item(0).nome, tipo, qnt, rows.item(0).prezzo_mez, id_vin);
+
+         $('.btn-a').css('background', '#9f223f').css('color', '#fff').html('AGGIUNTO');
+
+         setTimeout(function () {
+         apri_cart();
+
+         $('.btn-a').css('background', 'none').css('color', '#9f223f').html('ORDINA');
+         $('.qnt').text('1');
+         }, 200);
+         }
+         */
+    });
 }
