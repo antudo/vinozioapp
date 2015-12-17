@@ -19,13 +19,8 @@ function init_catalogo(query, selezionato) {
     var access_token = window.localStorage.getItem("access_token");
     console.log("init_catalogo access_token---> " + access_token);
     carica()
-
-
     $('*').not(".header").not(".btn").not(".voce").unbind("tap");
-  //  filtrocolore = '<div class="filColori"><div class="legend">' + lingua[11] + '</div><div data-colore="' + lingua[12] + '" class="red selezione"></div><div data-colore="' + lingua[13] + '" class="white selezione"></div><div data-colore="' + lingua[14] + '" class="spum selezione"></div><div data-colore="' + lingua[15] + '" class="rosa selezione"></div></div>';
-
-
-    // spostare in una funzione function renderCatalogoTopBar()
+    //todo: spostare in una funzione function renderCatalogoTopBar()
     var topbar = [
 
         ' <div class="barra">\
@@ -67,14 +62,13 @@ function init_catalogo(query, selezionato) {
             </div>'
 
     ]
-    // subito dopo chiamare la funzione per il binding delle icone di filtro
-
-
-    // "and": [ {"field1": "foo"}, {"field2": "bar"} ],
-
 
     if (!query) {
-        var url = 'https://obscure-anchorage-5846.herokuapp.com/api/storages?filter[include]=product';
+
+        var config = window.localStorage.getItem('config');
+        var url_config = JSON.parse(config)
+        var url = url_config.url.getStorageAndIncludeProducts;
+        //var url = 'https://obscure-anchorage-5846.herokuapp.com/api/storages?filter[include]=product';
 
     } else {
         var url = query
@@ -90,13 +84,11 @@ function init_catalogo(query, selezionato) {
         console.log("----[Callback from init_catalog]----");
 
         if(!storage_products) {
-            console.log("---------------NULL NULL NULL---------------")
-            productEntry = 'Nessun Prodotto presente in magazzino'
+            productEntry = '<div class="vino"><p> Nessun Prodotto trovato</p></div>'
             stop_carica()
             return $('.content0').html(topbar + productEntry); //render HTML
         }
         else {
-            console.log("-----------------ELSE ELSE ELSE----------------------")
             response_string = JSON.stringify(storage_products)
             storage_products_decodedJson = JSON.parse(response_string);
             console.log("storage_products.length: " + storage_products.length)
@@ -140,8 +132,6 @@ function init_catalogo(query, selezionato) {
                 console.log("----------------CICLO FINITO. RENDER ")
                 stop_carica(); // stop loading
                 $('.content0').html(topbar + container + productEntry + '</div>');
-
-
                 $('.filter').on("tap", function (e) {
                     e.preventDefault();
                     e.stopPropagation();
@@ -151,25 +141,18 @@ function init_catalogo(query, selezionato) {
                     e.preventDefault();
                     e.stopPropagation();
                     console.log("ID VINO--->" + $(this).attr("data-id"))
-                    //alert(e.target.getAttribute("data-id"));
                     showProductPage($(this).attr("data-id"))
-                    //showVino(getVinoById(e.target.getAttribute("data-tag"), JSONResponse));
                 });
-
-
             } else {
-                productEntry = 'Nessun Prodotto presente in magazzino'
+                productEntry = '<div class="vino"><p> Nessun Prodotto trovato</p></div>'
                 $('.content0').html(topbar + productEntry); //render HTML
                 stop_carica()
             }
             update_bind_cart();
-            // refresh_bind();
+            refresh_bind();
             bindProductSizeButtons()
             bindFilterKindOfWineButtons()
-            //   $('.vino').unbind("tap");
-
         }
-
     })
 }
 /**
@@ -284,6 +267,9 @@ function buildFeedbackStars() {
 }
 
 /**
+ *  todo: da inserire l'url per il GET della foto
+ *  todo: da salvare in un data-tag il nome del prodotto, in modo che sia visibile in fase di inserimento nel carrello, nella funzione function bindOrderNowButton() {..}
+ *
  *
  * @param productId
  */
@@ -292,7 +278,13 @@ function showProductPage(productId) {
     console.log("[showProductPage]" + productId)
     var access_token = window.localStorage.getItem("access_token");
     console.log("init_catalogo access_token---> " + access_token);
-    var url = 'https://obscure-anchorage-5846.herokuapp.com/api/storages/' + productId + '?filter[include]=product';
+
+    var config = window.localStorage.getItem('config');
+    var url_config = JSON.parse(config)
+    var url = url_config.url.getStorage+'/'+ productId + '?filter[include]=product';
+
+
+    //var url = 'https://obscure-anchorage-5846.herokuapp.com/api/storages/' + productId + '?filter[include]=product';
     var data = '';
     var accessToken = access_token;
 
@@ -308,8 +300,8 @@ function showProductPage(productId) {
 
             var product_in_storage_id = storage_products_decodedJson.id;
             var product_name = storage_products_decodedJson.product.name;
-            var location = "Italia";
-            var regione = "Sicilia";
+            var location = "Italia"; //todo: ricavare nazione dal codice numerico presente nel payload
+            var regione = "Sicilia"; //todo: rivavare regione dal codice numerico presente nel payload
             var anno = storage_products_decodedJson.product.year || '';
             var cantina = storage_products_decodedJson.product.cantina || '';
             var denominazione = storage_products_decodedJson.product.denomitation;
@@ -337,10 +329,12 @@ function showProductPage(productId) {
             format_prices = buildPricesForProductAvailableFormats(formato_disponibile);
             var descrizione = storage_products_decodedJson.product.description;
             colvin = lingua[12]; // capire perchè è sempre lingua[12]
-            var foto = "";
+
+
+            var foto = ""; // todo: da inserire l'url per il GET della foto
 
             vinoDOM = '<div class="legno"><div class="tovaglia"><div class="gd"></div><div class="gs"></div></div></div><div class="contenitore_prodotto"><div class="prodotto"><div class="goback">' + lingua[22] + '</div>\
-					<h1>' + product_name + '</h1>\
+					<h3>' + product_name + '</h3>\
 					<div class="cluster ultimo">\
 						<div class="dettagli flag n' + location + '"></div><div class="dettagli">' + location + regione + '</div>\
 					</div>\
@@ -360,7 +354,7 @@ function showProductPage(productId) {
 						<div class="btn-qnt"><div class="minus_icon" style="float: left;margin-left: 20px;font-size: 20px;width:50px;">-</div>\
 						<div class="qnt" style="float: left;text-align: center;width: 40px;">1</div>\
 						<div class="plus_icon" style="float: right;margin-right: 20px;font-size: 20px;width:50px;">+</div></div>\
-						<div data-id="' + product_in_storage_id + '" class="btn-a">' + lingua[23] + '</div>\
+					    <div data-id="' + product_in_storage_id + '" class="btn-a">' + lingua[23] + '</div>\
 					</div>\
 					<div class="clear"></div>\
 					<div class="stelle">\
@@ -394,7 +388,7 @@ function showProductPage(productId) {
         porta_su();
         bindGoBackButton();
         bindProductQtyButtons();
-        bindOrderNowButton();
+        bindOrderNowButton();''
         bindProductSizeButtons();
 
     })
@@ -415,19 +409,23 @@ function bindFilterKindOfWineButtons() {
 
         var pack = $('.fbot').attr('data-pack');
         var data_filter = $('.filColori').attr('data-filter');
-        console.log("PACK:" + pack)
+
+        // usato per identificare i filtri con la stessa classe .fbot, visualizzati in pagina catalogo piuttosto che nella scheda del prodotto
         console.log("data_filter:" + data_filter)
 
         if (data_filter == 'header-filter') {
             if ($('.filter').attr('data-fnaz') == '0') {
-                console.log("A"+$(this).attr("class"))
-
                 $('.filColori div').not('.legend').each(function () {
                     if ($(this).hasClass("selezione")) {
                         console.log("VALORE:" + $(this).attr("data-colore"))
                         var wine_subcategory = $(this).attr("data-colore");
                         $('.vino[data-tag="' + $(this).attr("data-colore") + '"]').show();
-                        var query = 'https://obscure-anchorage-5846.herokuapp.com/api/storages/filter-by-product-match?filter[where][and][0][maincategory]=Vino&' +
+                        var config = window.localStorage.getItem('config');
+                        var url_config = JSON.parse(config)
+                        var query = url_config.url.filterByproducts+'/?filter[where][and][0][maincategory]=Vino&' +
+                            'filter[where][and][1][subcategory]='+wine_subcategory;
+
+                     //   var query = 'https://obscure-anchorage-5846.herokuapp.com/api/storages/filter-by-product-match?filter[where][and][0][maincategory]=Vino&' +
                             'filter[where][and][1][subcategory]='+wine_subcategory;
                        init_catalogo(query,$(this).attr("class")+' selezione');
 
@@ -435,56 +433,43 @@ function bindFilterKindOfWineButtons() {
                     if (!$('.red').hasClass('selezione') && !$('.white').hasClass('selezione') && !$('.spum').hasClass('selezione') && !$('.rosa').hasClass('selezione')) {
                         console.log("VINO SHOW")
                         init_catalogo();
-
                        // $('.vino').show();
-
                     }
-
                 });
-
             }
             else {
-                console.log("B")
-
-
+                // todo: porzione di codice ancora da analizzare
+                console.log("DA ANALIZZARE_1")
                 $('.filColori div').not('.legend').each(function () {
                     if ($(this).hasClass("selezione"))
                         $('.vino[data-naz=' + $('.filter').attr('data-fnaz') + '][data-tag="' + $(this).attr("data-colore") + '"]').show();
                     if (!$('.red').hasClass('selezione') && !$('.white').hasClass('selezione') && !$('.spum').hasClass('selezione') && !$('.rosa').hasClass('selezione'))
-
                         $('.vino[data-naz=' + $('.filter').attr('data-fnaz') + ']').show();
                 });
 
             }
         }
         else {
-            console.log("ELSE 1")
-
+            // todo: porzione di codice ancora da analizzare
+            console.log("DA ANALIZZARE_2")
             if ($('.filter').attr('data-fnaz') == '0') {
-                console.log("2")
-
-
                 $('.filColori div').not('.legend').each(function () {
                     console.log("3")
-
                     if ($(this).hasClass("selezione"))
                         $('.vino[data-pack="' + pack + '"][data-tag="' + $(this).attr("data-colore") + '"]').show();
                     if (!$('.red').hasClass('selezione') && !$('.white').hasClass('selezione') && !$('.spum').hasClass('selezione') && !$('.rosa').hasClass('selezione'))
-                    //alert($(this).attr("data-colore"));
                         $('.vino[data-pack="' + pack + '"][data-tag="' + $(this).attr("data-colore") + '"]').show();
                 });
 
 
             }
             else {
-                console.log("4")
-
+                // todo: porzione di codice ancora da analizzare
+                console.log("DA ANALIZZARE_3")
                 $('.filColori div').not('.legend').each(function () {
-                    console.log("QUI")
                     if ($(this).hasClass("selezione"))
                         $('.vino[data-naz=' + $('.filter').attr('data-fnaz') + '][data-pack="' + pack + '"][data-tag="' + $(this).attr("data-colore") + '"]').show();
                     if (!$('.red').hasClass('selezione') && !$('.white').hasClass('selezione') && !$('.spum').hasClass('selezione') && !$('.rosa').hasClass('selezione'))
-                    //alert($(this).attr("data-colore"));
                         $('.vino[data-naz=' + $('.filter').attr('data-fnaz') + '][data-pack="' + pack + '"][data-tag="' + $(this).attr("data-colore") + '"]').show();
                 });
 
@@ -498,7 +483,7 @@ function bindFilterKindOfWineButtons() {
 
 
 /**
- *
+ * It binds the goBack button
  */
 function bindGoBackButton() {
     console.log("[bindGoBackButton]");
@@ -510,7 +495,7 @@ function bindGoBackButton() {
     });
 }
 /**
- *
+ * It binds the + and - symbol on the product page
  */
 function bindProductQtyButtons() {
     console.log("[bindProductQtyButtons]")
@@ -532,13 +517,16 @@ function bindProductQtyButtons() {
 }
 
 /**
- * todo : capire se possono esserci selezioni multiple
- *  if (pack == '000')
- pack = '111';
- if (pack == '111') {
-            console.log("PACK 111 "+pack)
-        }
+ * todo: Da completare.
+ *
+ *
+ *
+ * per i filtri in header devo comporre la query selezionando il prodotto in base alla disponibilità alla vendita in bottilia,calice,mezza bottiglia.
+ *  chiamare init_catalogo(query) come per i filtri di maincategory e subcategory
+ *
+ *
  */
+
 function bindProductSizeButtons() {
     $('.fbot div').not('.legend').unbind("tap").bind("tap", function (e) {
         e.preventDefault();
@@ -550,14 +538,7 @@ function bindProductSizeButtons() {
         pack += '0';
         var header_bottles = $('.fbot').attr('data-filter');
         console.log("header_bottles :"+header_bottles)
-        /**
-         *
-         *
-         * per i filtri in header devo comporre la query selezionando il prodotto in base alla disponibilità alla vendita in bottilia,calice,mezza bottiglia.
-         *  chiamare init_catalogo(query) come per i filtri di maincategory e subcategory
-         *
-         *
-         */
+
 
 
         if ($('.fbot .bottiglia').hasClass('sel')) {
@@ -596,6 +577,7 @@ function bindOrderNowButton() {
         var productId = $(this).attr("data-id");
         var qtyToOrder = $('.qnt').text();
 
+        //todo : da inserire anche il nome del prodotto. Ricavarlo come productId e qtyToOrder, dalla scheda del prodotto
 
         var order_to_add = {
             "product_size": product_selected[0],
@@ -608,7 +590,7 @@ function bindOrderNowButton() {
         }
 
 
-        console.log("order_to_add: " + JSON.stringify(order_to_add))
+        console.log("****order_to_add****: " + JSON.stringify(order_to_add))
         addToCart(order_to_add);
         $('.btn-a').css('background', '#9f223f').css('color', '#fff').html('AGGIUNTO');
 

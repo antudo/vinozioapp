@@ -87,11 +87,19 @@ avanti = function () {
 };
 indietro = function () {
 };
+
+
 // aggiungere il deviceready
 $(document).ready(function () {
     console.log("----addEvent---")
     window.localStorage.clear()
-    renderLoginPage();
+    $.getJSON('../application_setup.json', function(data) {
+        console.log("data---->"+JSON.stringify(data));
+        window.localStorage.setItem('config',JSON.stringify(data));
+        console.log("CONFIG:--"+window.localStorage.getItem('config'))
+        renderLoginPage();
+
+    });
     //start_app();
     //document.addEventListener("deviceready", start_app, false);
 });

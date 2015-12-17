@@ -1,9 +1,7 @@
-/**
- * Created by Antonio Di Mariano on 04/12/15.
- * email:antonio.dimariano@gmail.com
- * https://github.com/antoniodimariano/
- */
 store_product =[]
+
+
+// todo: porzione di codice ancora da rivedere
 function onConfirm() {
 
     $('.sono').addClass('io');
@@ -59,6 +57,9 @@ function onConfirm() {
  * issue: al momento si presenta questo errore quando la funzione viene invocata
  * Uncaught TypeError: Cannot read property 'confirm' of undefined
  *
+ *
+ *
+ * todo: Inserire la logica per la validazione da parte del cameriere
  */
 function buy_cart(products,total) {
 
@@ -73,10 +74,8 @@ function buy_cart(products,total) {
 
 
 
+    /* todo: dovrebbe visualizzare una PUSH Notification. Non è stata provata e l'oggetto navigator è sempre undefined
 
-    //if(confirm('Vuoi ordinare questi vini?')){
-
-    /*
     navigator.notification.confirm(
         'Vuoi ordinare questi vini?', // message
         cameriere,            // callback to invoke with index of button pressed
@@ -88,18 +87,28 @@ function buy_cart(products,total) {
 
 }
 
+/**
+ * it opens the cart
+ */
 function apri_cart() {
     console.log("--------apri_cart-------")
     $('.cartArea').addClass('sel');
     $('.btn-cart').addClass('sel');
 }
+/**
+ * it closes the cart
+ */
 function close_cart() {
     console.log("close_cart")
     $('.cartArea').removeClass('sel');
     $('.btn-cart').removeClass('sel');
 }
+
+
+/**
+ * todo: porzione di codice da rivedere
+ */
 function update_bind_cart() {
-    //$('.totaleVal span').text($('.cartArea table').attr('data-tot'));
         console.log("----------update_bind_cart---------")
 
     $('.btn-cart').unbind('tap').bind("tap", function (e) {
@@ -133,7 +142,6 @@ function update_bind_cart() {
             e.preventDefault();
             e.stopPropagation();
 
-
             $(this).fadeOut(function () {
 
                 $('.cartArea table').attr('data-tot',
@@ -160,26 +168,23 @@ function addToCart(productToAdd) {
     console.log("---------addToCart"+JSON.stringify(productToAdd))
     window.localStorage.setItem('addedToCart', JSON.stringify(productToAdd));
     var tmp_cart = window.localStorage.getItem('addedToCart');
-
     store_product.push(productToAdd);
-
     var prodotto =JSON.parse(tmp_cart);
     console.log("PRODOTTO "+prodotto.price)
-
     renderCart(prodotto);
-
 }
+
+/**
+ * todo : Da completare e verificare
+ */
 
 function emptyCart() {
     console.log("---------emptyCart-------");
     window.localStorage.clear('addedToCart')
-    store_product=[];
-
-
-
 }
 
 /**
+ *
  *
  * @param productJustAdded
  */
@@ -207,6 +212,7 @@ function renderCart(productJustAdded) {
 	</tr>';
 
 
+    // calcolo il totale dei prezzi degli oggetti inseriti
     var partial_totale = window.localStorage.getItem('partial_cart_total');
     if(!partial_totale) {
         console.log("!partial_table")
@@ -214,10 +220,9 @@ function renderCart(productJustAdded) {
         window.localStorage.setItem('partial_cart_total',partial_totale)
 
     } else {
-        console.log("TROVATO PARZIALE "+partial_totale)
+        console.log("PARZIALE "+partial_totale)
         var new_partial = Number(partial_totale) + Number(subtotal)
         partial_totale = new_partial;
-        console.log("nuovo parziale "+partial_totale)
         window.localStorage.setItem('partial_cart_total',Number(partial_totale))
 
     }

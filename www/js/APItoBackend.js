@@ -56,7 +56,7 @@ function sendAPIRequest(url, type, data, accessToken, callback) {
             console.log("Error request response text: " + request.responseText);
             console.log("Error response header: " + request.getAllResponseHeaders());
             $("#error").html(status);
-            callback()
+            callback(false)
 
         }
     })

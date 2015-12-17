@@ -3,17 +3,13 @@
  * email:antonio.dimariano@gmail.com
  * https://github.com/antoniodimariano/
  */
-
-
 /**
  *
  * @param callback
  */
-
 function login_form(callback) {
     stop_carica();
-    console.log("login form")
-
+    console.log("login_form")
     $(".voce_o").removeClass("voce_o");
     loginDOM = '\
 	\
@@ -29,46 +25,39 @@ function login_form(callback) {
 	\
 	';
     $('.content0').html(loginDOM);
-
-
-
     $('.signup').bind("click", function (e) {
         $('input').blur();
-        var url = 'https://obscure-anchorage-5846.herokuapp.com/api/users/login';
-        var data = {
-            email: $('input[type=email]').val(), password: $('input[type=password]').val()
-        };
-        var accessToken = '';
         loginRequest()
     })
 }
 
 /**
- *
+ * It renders the Login Form
  */
 function renderLoginPage() {
 
-    console.log("MYLOGIN");
+    console.log("renderLoginPage");
     initEvents()
-    loginRequest()
     $('.content0').addClass("content0_log");
-    init_tour();
-    stop_carica();
-    update_bind_cart();
-/*
-    login_form(function (accessToken) {
-        console.log("Callback from login" + accessToken)
+    autoLoginRequest(); // <--- commentare per attivare il form login
 
-        menu_close();
-        $('.content0').addClass("content0_log");
-        init_tour();
-        stop_carica();
-        update_bind_cart();
-    });
-*/
+    /*    COMMENTATO PER USARE autoLoginRequest()
+
+
+     login_form(function (accessToken) {
+     console.log("Callback from login" + accessToken)
+
+     menu_close();
+     $('.content0').addClass("content0_log");
+     init_tour();
+     stop_carica();
+     update_bind_cart();
+     });
+     */
 }
-
-
+/**
+ * It renders the HomePage
+ */
 function renderHomePage() {
     menu_close();
     $('.content0').addClass("content0_log");
@@ -76,39 +65,43 @@ function renderHomePage() {
     stop_carica();
     update_bind_cart();
 }
+
+
+/**
+ * todo: si potrebbe verificare i valori TTL anche lato client
+ */
 function isLogged() {
-    if (!(existItem("access_token"))) {  //attualmente il controllo verifica se esiste un cookie con key "access_token" e un altro con "userId"
-        window.location = 'login.html';  //ci sarebbe da controllare se i rispettivi valori sono validi (nel senso se sono autenticati dal server)
-    }                                     // in questo caso occorrerebbe concordare uno scambio di verifica client-server
+    if (!(existItem("access_token"))) {
+        window.location = 'login.html';
+    }
 }
+/**
+ * Just For Developement
+ *
+ * Auto Login
+ *
+ */
+function autoLoginRequest() {
+    var config = window.localStorage.getItem('config');
 
-function loginRequest() {
+    console.log("-----------------AUTO LOGIN MODE ON--------------------")
+    var config = window.localStorage.getItem('config');
+    var url_config = JSON.parse(config)
 
-    var url = 'https://obscure-anchorage-5846.herokuapp.com/api/users/login';
-   /*
-    var data = {
-        email: $('input[type=email]').val(), password: $('input[type=password]').val()
-    };
-    */
+    var url = url_config.url.login;
     var data = {
         email: "pepenero@gmail.com", password: "abcDEF9876"
     };
     var accessToken = '';
-    if (validateUserAndPass(data)) {
+    if (validateUserAndPass(data) ) {
         sendAPIRequest(url, 'POST', data, accessToken, function (response) {
             console.log("----[Callback from login]----" + response);
-            response_string = JSON.stringify(response)
-            decodedJson = JSON.parse(response_string);
-
-            console.log("----decodedJson----" + decodedJson.id)
-
-            if (decodedJson.hasOwnProperty('error')) {
-                loginFail(decodedJson);
-            } else if (decodedJson.hasOwnProperty('id') && decodedJson.hasOwnProperty('ttl')
-                && decodedJson.hasOwnProperty('created') && decodedJson.hasOwnProperty('userId')) {
-                loginSuccess(decodedJson);
+            if (response) {
+                console.log("OK LOGIN")
+                loginSuccess(response);
             } else {
-                loginFail(decodedJson);
+                console.log("LOGIN FAIL")
+                loginFail();
             }
         });
     } else {
@@ -116,6 +109,42 @@ function loginRequest() {
     }
 }
 
+/**
+ * it makes a POST requesto to /api/users/login
+ *
+ */
+function loginRequest() {
+
+    var config = window.localStorage.getItem('config');
+    var url_config = JSON.parse(config)
+    var url = url_config.url.login;
+
+
+    var data = {
+        email: $('input[type=email]').val(), password: $('input[type=password]').val()
+    };
+    var accessToken = '';
+    if (validateUserAndPass(data)) {
+        sendAPIRequest(url, 'POST', data, accessToken, function (response) {
+
+            if (response) {
+                console.log("OK LOGIN")
+                loginSuccess(response);
+            } else {
+                console.log("LOGIN FAIL")
+                loginFail();
+            }
+        });
+    } else {
+        loginFail();
+    }
+}
+
+/**
+ *
+ * @param data
+ * @returns {boolean}
+ */
 function validateUserAndPass(data) {
 
     if (validateEmail(data.email) && data.password.length > 4)
@@ -124,38 +153,58 @@ function validateUserAndPass(data) {
         return false;
 
 }
-
+/**
+ *
+ * @param email
+ * @returns {boolean}
+ */
 function validateEmail(email) {
     var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
     return re.test(email);
 }
-
+/**
+ * todo: Inserire PUSH notification al posto di alert
+ * @param decodedJson
+ */
 function loginFail(decodedJson) {
-    alert("Email o password non corretti");// modificare per far apparire notifica in stile iOS
+    //alert("Email o password non corretti");// modificare per far apparire notifica in stile iOS
+    console.log("LOGIN FAIL")
+    //renderLoginPage()
 
 }
-
+/**
+ *
+ */
 function logout() {
     console.log("----------LOGOUT--------")
-    var value =    window.localStorage.getItem("access_token");
-    console.log("LOGOUT TOKEN---> "+value);
-
-    var url = 'https://obscure-anchorage-5846.herokuapp.com/api/users/logout';
-    var data = {};
-    var accessToken = value;
-
-    sendAPIRequest(url, 'POST', data, accessToken, function (response) {
-        console.log("----[Callback from logout]----" + response);
-        deleteItem("access_token");
-        deleteItem("userId");
-        window.localStorage.clear();
-        localStorage.clear();
-        $('.btn-cart').hide();
-        $('.content0').removeClass("content0_log");
+    var value = window.localStorage.getItem("access_token");
+    console.log("ACCESS_TOKEN: " + value);
+    if(!value) {
         renderLoginPage()
-    });
-}
+    } else {
+        var config = window.localStorage.getItem('config');
+        var url_config = JSON.parse(config)
+        var url = url_config.url.logout;
 
+        var data = {};
+        var accessToken = value;
+
+        sendAPIRequest(url, 'POST', data, accessToken, function (response) {
+            console.log("----[Callback from logout]----" + response);
+            deleteItem("access_token");
+            deleteItem("userId");
+            window.localStorage.clear();
+            localStorage.clear();
+            $('.btn-cart').hide();
+            $('.content0').removeClass("content0_log");
+            renderLoginPage()
+        });
+    }
+}
+/**
+ *
+ * @param decodedJson
+ */
 function loginSuccess(decodedJson) {
     console.log("LOGIN SUCCESS")
     saveItem("access_token", decodedJson.id);

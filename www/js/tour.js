@@ -9,8 +9,17 @@ var scelte = new Array();
 var prezzo = 0;
 var filter = new Array()
 
-
+/**
+ *
+ */
 function init_tour() {
+
+    var config = window.localStorage.getItem('config');
+
+    console.log("CONFIG: "+config);
+
+
+
     $('.content0').html("");
     porta_su();
     $(".voce").removeClass("voce_o");
@@ -194,9 +203,17 @@ function dom() {
 
         console.log("WHERE:" + JSON.stringify(where));
 
-        var query = 'https://obscure-anchorage-5846.herokuapp.com/api/storages/filter-by-product-match?filter[where][and][0][subcategory]='+category+
-            '&filter[where][and][1][match.name]='+match_required+'&filter[where][storage][retail_price]='+25;
 
+
+        var config = window.localStorage.getItem('config');
+        var url_config = JSON.parse(config)
+        var url = url_config.url.filterByproducts;
+
+
+        // todo: sistemare il filtro della parte storage, per inserire il range del prezzo
+
+        var query = url+'?filter[where][and][0][subcategory]='+category+
+            '&filter[where][and][1][match.name]='+match_required+'&filter[where][storage][retail_price]='+25;
 
         console.log("QUERY "+query)
         init_catalogo(query);
@@ -236,16 +253,16 @@ function dom() {
 function savePreferenceTour(question, preference) {
     console.log("Question" + question)
     console.log("Preference" + preference);
-    saveItem(question, preference); //TODO settare opportunamente il tempo del cookie
+    saveItem(question, preference);
     /*
      if (isLogged) {
-     saveItem(question, preference); //TODO settare opportunamente il tempo del cookie
+     saveItem(question, preference);
      } else {
      alert("Effettua prima il login");
      }
      */
 }
-
+/*
 function sendPreference() {
     //TODO verificare il formato con la quale bisogna mandare le preference
     domande = new Array('colore', 'gradazione', 'perfetto', 'retrogusto', 'prezzo');
@@ -259,4 +276,4 @@ function sendPreference() {
         saveCatalogo(response);
     });
 }
-
+*/
