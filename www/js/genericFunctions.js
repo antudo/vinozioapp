@@ -71,25 +71,27 @@ lingua_en[27] = "Italian";
 lingua_en[28] = "Exit";
 lingua_en[29] = "No wine found.";
 
-
+//todo : non verificato
 voce = "tour";
+//todo : non verificato
 old = "tour";
-
+//todo : non verificato
 lingua = lingua_it;
-
-_topURL = "http://www.vinozio.com/crm/APP/";
-var server_url = "https://obscure-anchorage-5846.herokuapp.com";
-
-
+//todo : non verificato
 first = 0;
+
 
 avanti = function () {
 };
 indietro = function () {
 };
 
-
-// aggiungere il deviceready
+/**
+ *todo : aggiungere il deviceready
+ *
+ * document.addEventListener("deviceready", start_app, false);
+ *
+ */
 $(document).ready(function () {
     console.log("----addEvent---")
     window.localStorage.clear()
@@ -100,9 +102,9 @@ $(document).ready(function () {
         renderLoginPage();
 
     });
-    //start_app();
-    //document.addEventListener("deviceready", start_app, false);
 });
+
+//todo: non verificato
 function print_r(array, return_val) {
 
     var output = '',
@@ -170,6 +172,7 @@ function print_r(array, return_val) {
     }
     return output;
 }
+//todo: non verificato
 function stripslashes(str) {
     return (str + '')
         .replace(/\\(.?)/g, function (s, n1) {
@@ -191,6 +194,7 @@ function carica() {
 function stop_carica() {
     $('#caricatore').hide();
 }
+//todo: non verificato
 function init_cambia() {
 
     if (langg == "ita") {
@@ -217,10 +221,9 @@ function init_cambia() {
     menu_close();
 
 }
+
+//todo: precedente funzione per lo startup dell'applcazione
 function start_app() {
-
-
-
     /*
      db = window.openDatabase("Database", "1.0", "Cordova Demo", 200000);
      console.log("----DB-----", db);
@@ -272,23 +275,5 @@ function refresh_bind() {
 function init_esci() {
     console.log("---INIT ESCI--- Chiamo Logout")
     logout()
-    /*window.localStorage.clear();
-    window.localStorage.setItem("id_r", "");
-    window.localStorage.setItem("id", "");
-    $('.btn-cart').hide();
-    $('.content0').removeClass("content0_log");
-    init_login(function () {
-
-
-        $('.lente').hide();//DA LEVARE
-        menu_close();
-
-        $('.content0').addClass("content0_log");
-        update_menu();
-        init_tour();
-
-        stop_carica();
-        update_bind_cart();
-    });*/
 }
 

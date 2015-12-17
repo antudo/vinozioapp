@@ -324,7 +324,7 @@ function showProductPage(productId) {
             }
 
             product_details = buildProductDetails(options);
-            stars = buildFeedbackStars();
+            //stars = buildFeedbackStars();
             product_availability_format = buildProductSizeDetails(formato_disponibile);
             format_prices = buildPricesForProductAvailableFormats(formato_disponibile);
             var descrizione = storage_products_decodedJson.product.description;
@@ -357,9 +357,6 @@ function showProductPage(productId) {
 					    <div data-id="' + product_in_storage_id + '" class="btn-a">' + lingua[23] + '</div>\
 					</div>\
 					<div class="clear"></div>\
-					<div class="stelle">\
-						' + stars + '\
-					</div>\
 					<div class="clear"></div>\
 					' + foto + '\
 					<div class="caratteristiche">\
