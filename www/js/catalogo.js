@@ -10,7 +10,7 @@ var prices = [] // hashTable to store prices associated to different product siz
  * @param query
  * @param tour
  */
-function init_catalogo(query, tour) {
+function init_catalogo(query, selezionato) {
     console.log("---------------------INIT CATALOGO--------------------------")
     var imported = document.createElement('script');
     imported.src = 'js/filteringFunctions.js';
@@ -19,14 +19,13 @@ function init_catalogo(query, tour) {
     var access_token = window.localStorage.getItem("access_token");
     console.log("init_catalogo access_token---> " + access_token);
     carica()
-    update_bind_cart();
-    refresh_bind();
-    $('.vino').unbind("tap");
 
 
     $('*').not(".header").not(".btn").not(".voce").unbind("tap");
-    filtrocolore = '<div class="filColori"><div class="legend">' + lingua[11] + '</div><div data-colore="' + lingua[12] + '" class="red selezione"></div><div data-colore="' + lingua[13] + '" class="white selezione"></div><div data-colore="' + lingua[14] + '" class="spum selezione"></div><div data-colore="' + lingua[15] + '" class="rosa selezione"></div></div>';
+  //  filtrocolore = '<div class="filColori"><div class="legend">' + lingua[11] + '</div><div data-colore="' + lingua[12] + '" class="red selezione"></div><div data-colore="' + lingua[13] + '" class="white selezione"></div><div data-colore="' + lingua[14] + '" class="spum selezione"></div><div data-colore="' + lingua[15] + '" class="rosa selezione"></div></div>';
 
+
+    // spostare in una funzione function renderCatalogoTopBar()
     var topbar = [
 
         ' <div class="barra">\
@@ -34,24 +33,24 @@ function init_catalogo(query, tour) {
             <div class="filter" data-fnaz="0" data-filtro="naz">Nazione</div>\
             <div class="filtra naz">\
             <div class="libera nazz" style="display: none;">Nazione</div>\
-            <div data-naz="9" class="nazz" style="display: none;">Germania</div>\
+            <div data-naz="9" class="nazz" style="display: none; ">Germania</div>\
             <div data-naz="8" class="nazz" style="display: none;">Australia</div>\
             <div data-naz="7" class="nazz" style="display: none;">Cile</div>\
-            <div data-naz="6" class="nazz">Sud Africa</div>\
+            <div data-naz="6" class="nazz" style="display: none;>Sud Africa</div>\
             <div data-naz="5" class="nazz" style="display: none;">California</div>\
             <div data-naz="4" class="nazz" style="display: none;">Portogallo</div>\
             <div data-naz="3" class="nazz" style="display: none;">Francia</div>\
             <div data-naz="2" class="nazz" style="display: none;">Spagna</div>\
             <div data-naz="1" class="nazz">Italy</div>\
             </div>\
-                <div class="filColori">\
+                <div data-filter="header-filter" class="filColori">\
                     <div class="legend">Tipo di vino</div>\
                     <div data-colore="Vino Rosso" class="red"></div>\
                     <div data-colore="Vino Bianco" class="white"></div>\
                     <div data-colore="Spumante" class="spum"></div>\
                     <div data-colore="Vino Rosato" class="rosa"></div>\
                 </div>\
-                <div data-pack="111" class="fbot">\
+                <div data-filter="header_bottles" class="fbot">\
                     <div class="legend">Formato</div>\
                     <div class="bottiglia"></div>\
                     <div class="mezzo"></div>\
@@ -68,28 +67,55 @@ function init_catalogo(query, tour) {
             </div>'
 
     ]
+    // subito dopo chiamare la funzione per il binding delle icone di filtro
 
-    var url = 'https://obscure-anchorage-5846.herokuapp.com/api/storages?filter[include]=product';
+
+    // "and": [ {"field1": "foo"}, {"field2": "bar"} ],
+
+
+    if (!query) {
+        var url = 'https://obscure-anchorage-5846.herokuapp.com/api/storages?filter[include]=product';
+
+    } else {
+        var url = query
+    }
+
+    console.log("URL: " + url)
+
     var data = '';
     var accessToken = access_token;
-    sendPOSTRequest(url, 'GET', data, accessToken, function (storage_products) {
+
+
+    sendAPIRequest(url, 'GET', data, accessToken, function (storage_products) {
         console.log("----[Callback from init_catalog]----");
-        response_string = JSON.stringify(storage_products)
-        storage_products_decodedJson = JSON.parse(response_string);
-        console.log("storage_products.length: " + storage_products.length)
-        if (storage_products.length > 0) {
-            productEntry = ''; // ready to store HTML to render
-            for (var i = 0; i < storage_products.length; i++) {
 
-                var retail_price = storage_products_decodedJson[i].retail_price;
-                var product_name = storage_products_decodedJson[i].product.name;
-                var main_category = storage_products_decodedJson[i].product.maincategory;
-                var sub_category = storage_products_decodedJson[i].product.subcategory;
-                var year = storage_products_decodedJson[i].product.year;
-                var nation = 'Italy'; // to fix with nation number identification
+        if(!storage_products) {
+            console.log("---------------NULL NULL NULL---------------")
+            productEntry = 'Nessun Prodotto presente in magazzino'
+            stop_carica()
+            return $('.content0').html(topbar + productEntry); //render HTML
+        }
+        else {
+            console.log("-----------------ELSE ELSE ELSE----------------------")
+            response_string = JSON.stringify(storage_products)
+            storage_products_decodedJson = JSON.parse(response_string);
+            console.log("storage_products.length: " + storage_products.length)
+            console.log("storage_products: " + storage_products)
 
 
-                productEntry += '<div data-id="' + storage_products_decodedJson[i].id + '" data-tag="' + main_category + '" data-pack="110" data-naz="1" data-vino="273" class="vino">\
+            if (storage_products && storage_products.length > 0) {
+                productEntry = ''; // ready to store HTML to render
+                for (var i = 0; i < storage_products.length; i++) {
+
+                    var retail_price = storage_products_decodedJson[i].retail_price;
+                    var product_name = storage_products_decodedJson[i].product.name;
+                    var main_category = storage_products_decodedJson[i].product.maincategory;
+                    var sub_category = storage_products_decodedJson[i].product.subcategory;
+                    var year = storage_products_decodedJson[i].product.year;
+                    var nation = 'Italy'; // to fix with nation number identification
+
+
+                    productEntry += '<div data-id="' + storage_products_decodedJson[i].id + '" data-tag="' + main_category + '" data-pack="110" data-naz="1" data-vino="273" class="vino">\
                  <p class="vino_nome">' + product_name + '</p>\
                  <div class="clprezzo">&euro;' + retail_price + '</div>\
                  <div class="cluster dx">\
@@ -107,34 +133,43 @@ function init_catalogo(query, tour) {
                  <div class="clear"></div>\
                  </div>';
 
-            }
-            var container = '<div class="contenitore_vini">\
+                }
+                var container = '<div class="contenitore_vini">\
                              <div class="pd"></div>\
                              <div class="ps"></div>';
-            console.log("----------------CICLO FINITO. RENDER ")
-            stop_carica(); // stop loading
-            $('.content0').html(topbar + container + productEntry + '</div>');
+                console.log("----------------CICLO FINITO. RENDER ")
+                stop_carica(); // stop loading
+                $('.content0').html(topbar + container + productEntry + '</div>');
 
 
-            $('.filter').on("tap", function (e) {
-                e.preventDefault();
-                e.stopPropagation();
-                $(this).addClass("sel");
-            });
-            $('.vino').on("tap", function (e) {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log("ID VINO--->" + $(this).attr("data-id"))
-                //alert(e.target.getAttribute("data-id"));
-                showProductPage($(this).attr("data-id"))
-                //showVino(getVinoById(e.target.getAttribute("data-tag"), JSONResponse));
-            });
+                $('.filter').on("tap", function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    $(this).addClass("sel");
+                });
+                $('.vino').on("tap", function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log("ID VINO--->" + $(this).attr("data-id"))
+                    //alert(e.target.getAttribute("data-id"));
+                    showProductPage($(this).attr("data-id"))
+                    //showVino(getVinoById(e.target.getAttribute("data-tag"), JSONResponse));
+                });
 
 
-        } else {
-            productEntry = 'Nessun Prodotto presente in magazzino'
-            $('.content0').html(topbar + productEntry); //render HTML
+            } else {
+                productEntry = 'Nessun Prodotto presente in magazzino'
+                $('.content0').html(topbar + productEntry); //render HTML
+                stop_carica()
+            }
+            update_bind_cart();
+            // refresh_bind();
+            bindProductSizeButtons()
+            bindFilterKindOfWineButtons()
+            //   $('.vino').unbind("tap");
+
         }
+
     })
 }
 /**
@@ -186,11 +221,11 @@ function buildPricesForProductAvailableFormats(available_size) {
 
         }
         /*
-        if (available_size[i].name == "bottiglia") {
-            format_price += '<span class="bottle_price">' + available_size[i].price + '</span>';
+         if (available_size[i].name == "bottiglia") {
+         format_price += '<span class="bottle_price">' + available_size[i].price + '</span>';
 
-        }
-        */
+         }
+         */
         if (available_size[i].name == "mezzo") {
             format_price += '<span class="half_price">' + available_size[i].price + '</span>';
             prices[available_size[i].name] = available_size[i].price;
@@ -263,7 +298,7 @@ function showProductPage(productId) {
 
     carica()
 
-    sendPOSTRequest(url, 'GET', data, accessToken, function (storage_products) {
+    sendAPIRequest(url, 'GET', data, accessToken, function (storage_products) {
         console.log("----[Callback from showProductPage]---- " + storage_products);
 
         response_string = JSON.stringify(storage_products)
@@ -354,7 +389,7 @@ function showProductPage(productId) {
         }
         stop_carica();
         $('.content0').html(vinoDOM);
-        var product_selected=[];
+        var product_selected = [];
         update_bind_cart();
         porta_su();
         bindGoBackButton();
@@ -365,6 +400,103 @@ function showProductPage(productId) {
     })
 
 }
+
+
+function bindFilterKindOfWineButtons() {
+    console.log("----bindFilterKindOfWineButtons----")
+
+    $('.filColori div').not('.legend').unbind("tap").bind("tap", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        refresh_bind();
+        $('.fbot div').not('.legend').removeClass('sel');
+        $(this).toggleClass('selezione');
+        $('.vino').hide();
+
+        var pack = $('.fbot').attr('data-pack');
+        var data_filter = $('.filColori').attr('data-filter');
+        console.log("PACK:" + pack)
+        console.log("data_filter:" + data_filter)
+
+        if (data_filter == 'header-filter') {
+            if ($('.filter').attr('data-fnaz') == '0') {
+                console.log("A"+$(this).attr("class"))
+
+                $('.filColori div').not('.legend').each(function () {
+                    if ($(this).hasClass("selezione")) {
+                        console.log("VALORE:" + $(this).attr("data-colore"))
+                        var wine_subcategory = $(this).attr("data-colore");
+                        $('.vino[data-tag="' + $(this).attr("data-colore") + '"]').show();
+                        var query = 'https://obscure-anchorage-5846.herokuapp.com/api/storages/filter-by-product-match?filter[where][and][0][maincategory]=Vino&' +
+                            'filter[where][and][1][subcategory]='+wine_subcategory;
+                       init_catalogo(query,$(this).attr("class")+' selezione');
+
+                    }
+                    if (!$('.red').hasClass('selezione') && !$('.white').hasClass('selezione') && !$('.spum').hasClass('selezione') && !$('.rosa').hasClass('selezione')) {
+                        console.log("VINO SHOW")
+                        init_catalogo();
+
+                       // $('.vino').show();
+
+                    }
+
+                });
+
+            }
+            else {
+                console.log("B")
+
+
+                $('.filColori div').not('.legend').each(function () {
+                    if ($(this).hasClass("selezione"))
+                        $('.vino[data-naz=' + $('.filter').attr('data-fnaz') + '][data-tag="' + $(this).attr("data-colore") + '"]').show();
+                    if (!$('.red').hasClass('selezione') && !$('.white').hasClass('selezione') && !$('.spum').hasClass('selezione') && !$('.rosa').hasClass('selezione'))
+
+                        $('.vino[data-naz=' + $('.filter').attr('data-fnaz') + ']').show();
+                });
+
+            }
+        }
+        else {
+            console.log("ELSE 1")
+
+            if ($('.filter').attr('data-fnaz') == '0') {
+                console.log("2")
+
+
+                $('.filColori div').not('.legend').each(function () {
+                    console.log("3")
+
+                    if ($(this).hasClass("selezione"))
+                        $('.vino[data-pack="' + pack + '"][data-tag="' + $(this).attr("data-colore") + '"]').show();
+                    if (!$('.red').hasClass('selezione') && !$('.white').hasClass('selezione') && !$('.spum').hasClass('selezione') && !$('.rosa').hasClass('selezione'))
+                    //alert($(this).attr("data-colore"));
+                        $('.vino[data-pack="' + pack + '"][data-tag="' + $(this).attr("data-colore") + '"]').show();
+                });
+
+
+            }
+            else {
+                console.log("4")
+
+                $('.filColori div').not('.legend').each(function () {
+                    console.log("QUI")
+                    if ($(this).hasClass("selezione"))
+                        $('.vino[data-naz=' + $('.filter').attr('data-fnaz') + '][data-pack="' + pack + '"][data-tag="' + $(this).attr("data-colore") + '"]').show();
+                    if (!$('.red').hasClass('selezione') && !$('.white').hasClass('selezione') && !$('.spum').hasClass('selezione') && !$('.rosa').hasClass('selezione'))
+                    //alert($(this).attr("data-colore"));
+                        $('.vino[data-naz=' + $('.filter').attr('data-fnaz') + '][data-pack="' + pack + '"][data-tag="' + $(this).attr("data-colore") + '"]').show();
+                });
+
+            }
+        }
+
+    });
+
+
+}
+
+
 /**
  *
  */
@@ -402,8 +534,8 @@ function bindProductQtyButtons() {
 /**
  * todo : capire se possono esserci selezioni multiple
  *  if (pack == '000')
-            pack = '111';
-    if (pack == '111') {
+ pack = '111';
+ if (pack == '111') {
             console.log("PACK 111 "+pack)
         }
  */
@@ -416,8 +548,20 @@ function bindProductSizeButtons() {
         var pack = '';
         var tipo = [];
         pack += '0';
+        var header_bottles = $('.fbot').attr('data-filter');
+        console.log("header_bottles :"+header_bottles)
+        /**
+         *
+         *
+         * per i filtri in header devo comporre la query selezionando il prodotto in base alla disponibilità alla vendita in bottilia,calice,mezza bottiglia.
+         *  chiamare init_catalogo(query) come per i filtri di maincategory e subcategory
+         *
+         *
+         */
+
 
         if ($('.fbot .bottiglia').hasClass('sel')) {
+
             tipo.push("bottiglia");
             $('.fbot .mezzo').removeClass('sel');
             $('.fbot .calice').removeClass('sel');
@@ -435,14 +579,14 @@ function bindProductSizeButtons() {
             $('.fbot .bottiglia').removeClass('sel');
         }
         $('.fbot').attr('data-pack', pack);
-        $('.vino').hide();
-        console.log("TIPO: " + tipo );
+        //$('.vino').hide();
+        console.log("TIPO: " + tipo);
         product_selected = tipo;
 
     })
 }
 /**
- * todo: da inserire la logica per inserire l'ordine nel carrello
+ * todo: da completare la logica per inserire l'ordine nel carrello
  */
 function bindOrderNowButton() {
     $('.btn-a').unbind("tap").bind("tap", function (e) {
@@ -454,17 +598,17 @@ function bindOrderNowButton() {
 
 
         var order_to_add = {
-            "product_size" : product_selected[0],
-            "qty":qtyToOrder,
-            "productId":productId,
-            price : prices[product_selected[0]],
-            subtotal : prices[product_selected[0]] * qtyToOrder
+            "product_size": product_selected[0],
+            "qty": qtyToOrder,
+            "productId": productId,
+            price: prices[product_selected[0]],
+            subtotal: prices[product_selected[0]] * qtyToOrder
 
 
         }
 
 
-        console.log("order_to_add: "+JSON.stringify(order_to_add))
+        console.log("order_to_add: " + JSON.stringify(order_to_add))
         addToCart(order_to_add);
         $('.btn-a').css('background', '#9f223f').css('color', '#fff').html('AGGIUNTO');
 
@@ -496,3 +640,5 @@ function bindOrderNowButton() {
          */
     });
 }
+
+

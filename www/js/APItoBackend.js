@@ -28,12 +28,12 @@ function get_storages(query) {
 
 }
 
-function sendPOSTRequest(url,type,data,accessToken,callback) {
+function sendAPIRequest(url, type, data, accessToken, callback) {
 
-    console.log("sendPOSTRequest[url]:"+url);
-    console.log("sendPOSTRequest[data]:"+JSON.stringify(data));
-    console.log("sendPOSTRequest[type]:"+type);
-    console.log("sendPOSTRequest[accessToken]:"+accessToken);
+    console.log("sendAPIRequest[url]:"+url);
+    console.log("sendAPIRequest[data]:"+JSON.stringify(data));
+    console.log("sendAPIRequest[type]:"+type);
+    console.log("sendAPIRequest[accessToken]:"+accessToken);
 
 
     $.ajax({
@@ -46,7 +46,7 @@ function sendPOSTRequest(url,type,data,accessToken,callback) {
             'Accept': 'application/json'
         },
         success: function (response) {
-            console.log("sendPOSTRequest[RESPONSE] : " + JSON.stringify(response));
+            console.log("sendAPIRequest[RESPONSE] : " + JSON.stringify(response));
             callback(response)
         },
         error: function(request, status, error) {
@@ -56,7 +56,7 @@ function sendPOSTRequest(url,type,data,accessToken,callback) {
             console.log("Error request response text: " + request.responseText);
             console.log("Error response header: " + request.getAllResponseHeaders());
             $("#error").html(status);
-            callback({"error":"login failed"})
+            callback()
 
         }
     })

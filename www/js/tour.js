@@ -96,7 +96,6 @@ function init_tour() {
     $('.risposta').unbind("tap").bind("tap", function (e) {
         e.preventDefault();
         e.stopPropagation();
-        console.log("TAP");
         console.log("---DATA--" + e.target.getAttribute('data-value'));
         filter.push(e.target.getAttribute('data-value'));
 
@@ -181,19 +180,27 @@ function dom() {
     if (step >= domande.length) {
         console.log("SCELTE " + filter)
 
-        var category = filter[0];
-        var match_required = filter[1];
-        var retail_price = filter[2];
+
+        var category = filter[0].trim();
+        var match_required = filter[1].trim();
+        var retail_price = filter[2].trim();
 
         var where = {
 
             "subcategory": category,
-            "match.food": match_required,
+            "food": match_required,
             "retail_price": retail_price
         }
+
         console.log("WHERE:" + JSON.stringify(where));
-        get_vini(where);
-        init_catalogo("", "1");
+
+        var query = 'https://obscure-anchorage-5846.herokuapp.com/api/storages/filter-by-product-match?filter[where][and][0][subcategory]='+category+
+            '&filter[where][and][1][match.name]='+match_required+'&filter[where][storage][retail_price]='+25;
+
+
+        console.log("QUERY "+query)
+        init_catalogo(query);
+
 
     }
     else {

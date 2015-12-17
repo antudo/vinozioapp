@@ -95,7 +95,7 @@ function loginRequest() {
     };
     var accessToken = '';
     if (validateUserAndPass(data)) {
-        sendPOSTRequest(url, 'POST', data, accessToken, function (response) {
+        sendAPIRequest(url, 'POST', data, accessToken, function (response) {
             console.log("----[Callback from login]----" + response);
             response_string = JSON.stringify(response)
             decodedJson = JSON.parse(response_string);
@@ -144,7 +144,7 @@ function logout() {
     var data = {};
     var accessToken = value;
 
-    sendPOSTRequest(url, 'POST', data, accessToken, function (response) {
+    sendAPIRequest(url, 'POST', data, accessToken, function (response) {
         console.log("----[Callback from logout]----" + response);
         deleteItem("access_token");
         deleteItem("userId");

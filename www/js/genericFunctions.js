@@ -243,7 +243,7 @@ function refresh_bind() {
         e.preventDefault();
         e.stopPropagation();
 
-        init_vino($(this).attr("data-vino"));
+        showProductPage($(this).attr("data-id"))
     });
 
     $(document).on("scrollstart", function () {
@@ -252,8 +252,8 @@ function refresh_bind() {
             $('.vino').unbind("tap").bind("tap", function (e) {
                 e.preventDefault();
                 e.stopPropagation();
+                showProductPage($(this).attr("data-id"))
 
-                init_vino($(this).attr("data-vino"));
             });
         }, 50);
 
