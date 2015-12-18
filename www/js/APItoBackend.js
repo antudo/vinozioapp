@@ -3,30 +3,6 @@
  * email:antonio.dimariano@gmail.com
  * https://github.com/antoniodimariano/
  */
-function get_vini(query) {
-    console.log("GET VINI"+JSON.stringify(query))
-
-}
-function get_storages(query) {
-
-    $.ajax({
-        url: server_url + '/api/storages',
-        type: "GET",
-        headers :  {
-            'Authorization' : accessToken
-        },
-        success: function (response) {
-            console.log("Response: " + JSON.stringify(response));
-            callback(response)
-        },
-        error: function (data) {
-            alert("Errore")
-            callback({"error":"login failed"})
-
-        }
-    })
-
-}
 
 function sendAPIRequest(url, type, data, accessToken, callback) {
 
