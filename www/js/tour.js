@@ -14,7 +14,8 @@ var filter = new Array()
  */
 function init_tour() {
 
-    var config = window.localStorage.getItem('config');
+    // var config = window.localStorage.getItem('config');
+    var config = VIN.config;
 
     console.log("CONFIG: "+config);
 
@@ -205,8 +206,9 @@ function dom() {
 
 
 
-        var config = window.localStorage.getItem('config');
-        var url_config = JSON.parse(config)
+        // var config = window.localStorage.getItem('config');
+        var config = VIN.config;
+        var url_config = config;
         var url = url_config.url.filterByproducts;
 
 

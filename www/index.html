@@ -75,7 +75,12 @@
         <div class="voci">
             <ul>
                 <li data-cont="tour" class="voce icon-flag">Inizia Tour</li>
-                <li data-cont="catalogo" class="voce icon-catalogo "> Lista </li>
+                <li data-cont="catalogo" class="othervoce icon-catalogo">Lista</li>
+                <ul class="submenu">
+                  <li class="voce icon-catalogo">Vini</li>
+                  <li class="voce icon-catalogo">Birre</li>
+                  <li class="voce icon-catalogo">Distillati</li>
+                </ul>
                 <li data-cont="ristorante" class="voce icon-flag">Il Ristorante</li>
                 <li data-cont="cambia" class="voce icon-flag">Inglese</li>
                 <li data-cont="esci" class="voce icon-flag">Esci</li>
@@ -89,6 +94,8 @@
 <script src="cordova.js"></script>
 <script src="js/jquery-1.11.1.min.js"></script>
 <script src="js/jquery.mobile.custom.min.js"></script>
+
+<script src="js/config.js"></script>
 <script src="js/genericFunctions.js"></script>
 <script src="js/login.js"></script>
 <script src="js/eventListener.js"></script>
@@ -100,5 +107,7 @@
 <script src="js/tour.js"></script>
 <script src="js/APItoBackend.js"></script>
 
+<!-- new script -->
+<script src="js/app.js"></script>
 
 </html>

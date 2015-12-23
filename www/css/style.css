@@ -670,6 +670,19 @@ position: absolute;
 	overflow-x: hidden;
 	overflow-y: auto;
 }
+
+.voci ul.submenu
+{
+  transition: height 0.2s;
+  overflow: hidden;
+  height: 0;
+}
+
+.voci ul.submenu li
+{
+  padding-left: 40px;
+}
+
 .profile_top{
 	background: url(../images/bg_profile.jpg) no-repeat center top;
   -webkit-background-size: 1024px;
@@ -761,7 +774,9 @@ font-weight: bold;
 	padding-top: 10px;
 }
 
-.voce{
+.voce,
+.voci li
+{
 	border-bottom: 1px solid #292929;
     height: 2em;
     padding-left: 1em;
@@ -2008,4 +2023,3 @@ background-color:#FFFFFF}
 	background: #fff;
 	color: #000;
 }
-
