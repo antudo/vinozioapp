@@ -92,18 +92,21 @@ function init_catalogo(query, selezionato) {
             response_string = JSON.stringify(storage_products)
             storage_products_decodedJson = JSON.parse(response_string);
             console.log("storage_products.length: " + storage_products.length)
-            console.log("storage_products: " + storage_products)
+                console.log("storage_products: " + JSON.stringify(storage_products_decodedJson))
 
 
             if (storage_products && storage_products.length > 0) {
                 productEntry = ''; // ready to store HTML to render
                 for (var i = 0; i < storage_products.length; i++) {
 
-                    var retail_price = storage_products_decodedJson[i].retail_price;
-                    var product_name = storage_products_decodedJson[i].product.name;
-                    var main_category = storage_products_decodedJson[i].product.maincategory;
-                    var sub_category = storage_products_decodedJson[i].product.subcategory;
-                    var year = storage_products_decodedJson[i].product.year;
+                    if(storage_products_decodedJson[i].external) {
+                        console.log("EXTERNAL-----------> "+storage_products_decodedJson[i].external.name)
+                    }
+                    var retail_price = storage_products_decodedJson[i].retail_price ;
+                    var product_name  = (storage_products_decodedJson[i].product) ? storage_products_decodedJson[i].product.name : storage_products_decodedJson[i].external.name;
+                    var main_category = (storage_products_decodedJson[i].product) ? storage_products_decodedJson[i].product.maincategory :  storage_products_decodedJson[i].external.name;
+                    var sub_category = (storage_products_decodedJson[i].product)  ? storage_products_decodedJson[i].product.subcategory : storage_products_decodedJson[i].external.name;
+                    var year = (storage_products_decodedJson[i].product) ? storage_products_decodedJson[i].product.year : storage_products_decodedJson[i].external.name;
                     var nation = 'Italy'; // to fix with nation number identification
 
 
@@ -299,16 +302,16 @@ function showProductPage(productId) {
         if (response_string.length > 0) {
 
             var product_in_storage_id = storage_products_decodedJson.id;
-            var product_name = storage_products_decodedJson.product.name;
+            var product_name = (storage_products_decodedJson.product) ? storage_products_decodedJson.product.name : storage_products_decodedJson.external.name;
             var location = "Italia"; //todo: ricavare nazione dal codice numerico presente nel payload
             var regione = "Sicilia"; //todo: rivavare regione dal codice numerico presente nel payload
-            var anno = storage_products_decodedJson.product.year || '';
-            var cantina = storage_products_decodedJson.product.cantina || '';
-            var denominazione = storage_products_decodedJson.product.denomitation;
-            var vitigno = storage_products_decodedJson.product.vitigno || '';
-            var gradazione = storage_products_decodedJson.product.proof || '';
-            var prezzo = storage_products_decodedJson.retail_price;
-            var formato_disponibile = storage_products_decodedJson.size;
+            var anno = (storage_products_decodedJson.product) ? storage_products_decodedJson.product.year : storage_products_decodedJson.external.year || '';
+            var cantina = (storage_products_decodedJson.product) ? storage_products_decodedJson.product.cantina :  '';
+            var denominazione = (storage_products_decodedJson.product) ? storage_products_decodedJson.product.denomitation : storage_products_decodedJson.external.denomitation;
+            var vitigno = (storage_products_decodedJson.product) ? storage_products_decodedJson.product.vitigno : '';
+            var gradazione =(storage_products_decodedJson.product) ? storage_products_decodedJson.product.proof : storage_products_decodedJson.external.proof || '';
+            var prezzo =  storage_products_decodedJson.retail_price;
+            var formato_disponibile =  storage_products_decodedJson.size;
 
             prices['bottiglia'] = prezzo;
 

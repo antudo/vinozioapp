@@ -18,7 +18,7 @@ function init_tour() {
 
     console.log("CONFIG: "+config);
 
-
+    filter = [];
 
     $('.content0').html("");
     porta_su();
@@ -188,32 +188,28 @@ function init_tour() {
 function dom() {
     if (step >= domande.length) {
         console.log("SCELTE " + filter)
-
-
         var category = filter[0].trim();
         var match_required = filter[1].trim();
         var retail_price = filter[2].trim();
-
-        var where = {
-
-            "subcategory": category,
-            "food": match_required,
-            "retail_price": retail_price
-        }
-
-        console.log("WHERE:" + JSON.stringify(where));
-
-
-
+        console.log("retail_price: "+filter[2].trim());
+        console.log("LENGHT: "+filter[2].trim().length);
         var config = window.localStorage.getItem('config');
         var url_config = JSON.parse(config)
         var url = url_config.url.filterByproducts;
+        var query_to_add='';
 
+        if (retail_price && retail_price.lastIndexOf('-') != -1) {
+            var first_price = retail_price.split('-')[0];
+            var snd_price = retail_price.split('-')[1];
+            console.log("First price :"+first_price);
+            console.log("Second price :"+snd_price);
+             query_to_add = '&filter[where][storage][and][0][retail_price][lt]='+snd_price+'&filter[where]' +
+                '[storage][and][1][retail_price][gt]='+first_price;
 
-        // todo: sistemare il filtro della parte storage, per inserire il range del prezzo
+        } else  query_to_add = '&filter[where][storage][retail_price][gt]='+retail_price
 
         var query = url+'?filter[where][and][0][subcategory]='+category+
-            '&filter[where][and][1][match.name]='+match_required+'&filter[where][storage][retail_price]='+25;
+            '&filter[where][and][1][match.name]='+match_required+query_to_add;
 
         console.log("QUERY "+query)
         init_catalogo(query);
