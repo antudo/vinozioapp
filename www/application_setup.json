@@ -1,10 +1,10 @@
 {
   "url": {
-    "login": "https://obscure-anchorage-5846.herokuapp.com/api/users/login",
-    "logout": "https://obscure-anchorage-5846.herokuapp.com/api/users/logout",
-    "filterByproducts":"https://obscure-anchorage-5846.herokuapp.com/api/storages/filter-by-product-match",
-    "getStorageAndIncludeProducts" :"https://obscure-anchorage-5846.herokuapp.com/api/storages?filter[include]=product",
-    "getStorage":"https://obscure-anchorage-5846.herokuapp.com/api/storages",
-    "sendOrder":"https://obscure-anchorage-5846.herokuapp.com/api/orders"
+    "login": "http://localhost:4000/api/users/login",
+    "logout": "http://localhost:4000/api/users/logout",
+    "filterByproducts":"http://localhost:4000/api/storages/filter-by-product-match",
+    "getStorageAndIncludeProducts" :"http://localhost:4000/api/storages?filter[include]=product&filter[include]=external",
+    "getStorage":"http://localhost:4000/api/storages",
+    "sendOrder":"http://localhost:4000/api/orders"
   }
 }
