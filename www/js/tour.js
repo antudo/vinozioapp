@@ -14,7 +14,8 @@ var filter = new Array()
  */
 function init_tour() {
 
-    var config = window.localStorage.getItem('config');
+    // var config = window.localStorage.getItem('config');
+    var config = VIN.config;
 
     console.log("CONFIG: "+config);
 
@@ -191,10 +192,22 @@ function dom() {
         var category = filter[0].trim();
         var match_required = filter[1].trim();
         var retail_price = filter[2].trim();
-        console.log("retail_price: "+filter[2].trim());
-        console.log("LENGHT: "+filter[2].trim().length);
-        var config = window.localStorage.getItem('config');
-        var url_config = JSON.parse(config)
+
+
+        var where = {
+
+            "subcategory": category,
+            "food": match_required,
+            "retail_price": retail_price
+        }
+
+        console.log("WHERE:" + JSON.stringify(where));
+
+
+
+        // var config = window.localStorage.getItem('config');
+        var config = VIN.config;
+        var url_config = config;
         var url = url_config.url.filterByproducts;
         var query_to_add='';
 

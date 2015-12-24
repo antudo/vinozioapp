@@ -59,6 +59,11 @@ function initEvents() {
         $('.voce_o').removeClass("voce_o");
         old = voce;
         voce = $(this).attr("data-cont");
+
+        // added for supporting init_catalogo() with params
+        var params = $(this).attr("data-query-params");
+        console.log("PARAMS = "+params);
+
         $(this).addClass("voce_o");
         console.log("VOCE:"+voce);
         window['init_' + voce]();

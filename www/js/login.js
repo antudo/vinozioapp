@@ -82,18 +82,25 @@ function isLogged() {
  *
  */
 function autoLoginRequest() {
-    var config = window.localStorage.getItem('config');
 
     console.log("-----------------AUTO LOGIN MODE ON--------------------")
-    var config = window.localStorage.getItem('config');
-    var url_config = JSON.parse(config)
+    // var config = window.localStorage.getItem('config');
+    
+    var config = VIN.config;
+    console.log(config);
+    var url_config = config;
 
     var url = url_config.url.login;
     var data = {
         email: "pepenero@gmail.com", password: "abcDEF9876"
     };
     var accessToken = '';
-    if (validateUserAndPass(data) ) {
+
+    console.log("validating user and pass");
+
+    if (validateUserAndPass(data) )
+    {
+      console.log("sending request for auto login");
         sendAPIRequest(url, 'POST', data, accessToken, function (response) {
             console.log("----[Callback from login]----" + response);
             if (response) {
@@ -104,7 +111,9 @@ function autoLoginRequest() {
                 loginFail();
             }
         });
-    } else {
+    }
+    else
+    {
         loginFail();
     }
 }
@@ -115,8 +124,9 @@ function autoLoginRequest() {
  */
 function loginRequest() {
 
-    var config = window.localStorage.getItem('config');
-    var url_config = JSON.parse(config)
+    // var config = window.localStorage.getItem('config');
+    var config = VIN.config;
+    var url_config = config;
     var url = url_config.url.login;
 
 
@@ -182,8 +192,9 @@ function logout() {
     if(!value) {
         renderLoginPage()
     } else {
-        var config = window.localStorage.getItem('config');
-        var url_config = JSON.parse(config)
+        // var config = window.localStorage.getItem('config');
+        var config = VIN.config;
+        var url_config = config;
         var url = url_config.url.logout;
 
         var data = {};
@@ -211,4 +222,3 @@ function loginSuccess(decodedJson) {
     saveItem("userId", decodedJson.userId);
     renderHomePage()
 }
-

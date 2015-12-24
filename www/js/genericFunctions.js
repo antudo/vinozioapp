@@ -92,17 +92,34 @@ indietro = function () {
  * document.addEventListener("deviceready", start_app, false);
  *
  */
-$(document).ready(function () {
-    console.log("----addEvent---")
-    window.localStorage.clear()
-    $.getJSON('../application_setup.json', function(data) {
-        console.log("data---->"+JSON.stringify(data));
-        window.localStorage.setItem('config',JSON.stringify(data));
-        console.log("CONFIG:--"+window.localStorage.getItem('config'))
-        renderLoginPage();
 
-    });
+var bootstrapApp = function(from)
+{
+  console.log("starting up "+from);
+  console.log("----addEvent---")
+  window.localStorage.clear()
+
+  // var data = VIN.config;
+  // $.getJSON('../application_setup.json', function(data) {
+      // console.log("data---->"+JSON.stringify(data));
+      // window.localStorage.setItem('config',JSON.stringify(data));
+      // window.localStorage.setItem('config', data);
+      // console.log("CONFIG:--"+window.localStorage.getItem('config'))
+      renderLoginPage();
+  // });
+}
+
+// ========================================================================
+// starting up app
+
+$(document).ready(function () {
+  bootstrapApp();
+  document.addEventListener("deviceready", function(){
+    bootstrapApp("deviceready");
+  }, false);
 });
+
+// ========================================================================
 
 //todo: non verificato
 function print_r(array, return_val) {
@@ -276,4 +293,3 @@ function init_esci() {
     console.log("---INIT ESCI--- Chiamo Logout")
     logout()
 }
-

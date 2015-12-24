@@ -65,8 +65,9 @@ function init_catalogo(query, selezionato) {
 
     if (!query) {
 
-        var config = window.localStorage.getItem('config');
-        var url_config = JSON.parse(config)
+        // var config = window.localStorage.getItem('config');
+        var config = VIN.config;
+        var url_config = config;
         var url = url_config.url.getStorageAndIncludeProducts;
         //var url = 'https://obscure-anchorage-5846.herokuapp.com/api/storages?filter[include]=product';
 
@@ -282,8 +283,9 @@ function showProductPage(productId) {
     var access_token = window.localStorage.getItem("access_token");
     console.log("init_catalogo access_token---> " + access_token);
 
-    var config = window.localStorage.getItem('config');
-    var url_config = JSON.parse(config)
+    // var config = window.localStorage.getItem('config');
+    var config = VIN.config;
+    var url_config = config
     var url = url_config.url.getStorage+'/'+ productId + '?filter[include]=product';
 
 
@@ -420,8 +422,9 @@ function bindFilterKindOfWineButtons() {
                         console.log("VALORE:" + $(this).attr("data-colore"))
                         var wine_subcategory = $(this).attr("data-colore");
                         $('.vino[data-tag="' + $(this).attr("data-colore") + '"]').show();
-                        var config = window.localStorage.getItem('config');
-                        var url_config = JSON.parse(config)
+                        // var config = window.localStorage.getItem('config');
+                        var config = VIN.config;
+                        var url_config = config;
                         var query = url_config.url.filterByproducts+'/?filter[where][and][0][maincategory]=Vino&' +
                             'filter[where][and][1][subcategory]='+wine_subcategory;
 
@@ -622,5 +625,3 @@ function bindOrderNowButton() {
          */
     });
 }
-
-
