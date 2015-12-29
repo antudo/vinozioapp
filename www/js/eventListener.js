@@ -64,9 +64,21 @@ function initEvents() {
         var params = $(this).attr("data-query-params");
         console.log("PARAMS = "+params);
 
+        var query = null;
+        if(typeof params !== "undefined")
+        {
+          query = VIN.config.url.filterByproducts;
+          if(params == 'vino')
+            query += '/?filter[where][and][0][maincategory]=Vino';
+          else if(params == 'birra')
+            query += '/?filter[where][and][0][maincategory]=Birra';
+          else if(params == 'distillato')
+            query += '/?filter[where][and][0][maincategory]=Distillato';
+        }
+
         $(this).addClass("voce_o");
         console.log("VOCE:"+voce);
-        window['init_' + voce]();
+        window['init_' + voce](query);
         update_bind_cart();
         menu_close();
     });
