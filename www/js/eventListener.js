@@ -69,11 +69,11 @@ function initEvents() {
         {
           query = VIN.config.url.filterByproducts;
           if(params == 'vino')
-            query += '/?filter[where][and][0][maincategory]=Vino';
+            query += '/?filter[where][maincategory]=Vino';
           else if(params == 'birra')
-            query += '/?filter[where][and][0][maincategory]=Birra';
+            query += '/?filter[where][maincategory]=Birra';
           else if(params == 'distillato')
-            query += '/?filter[where][and][0][maincategory]=Distillato';
+            query += '/?filter[where][maincategory]=Distillato';
         }
 
         $(this).addClass("voce_o");
