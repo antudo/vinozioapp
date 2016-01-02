@@ -169,7 +169,7 @@ function addToCart(productToAdd) {
     window.localStorage.setItem('addedToCart', JSON.stringify(productToAdd));
     var tmp_cart = window.localStorage.getItem('addedToCart');
     store_product.push(productToAdd);
-    var prodotto =JSON.parse(tmp_cart);
+    var prodotto = JSON.parse(tmp_cart);
     console.log("PRODOTTO "+prodotto.price)
     renderCart(prodotto);
 }

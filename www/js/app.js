@@ -2,6 +2,7 @@ var VIN = VIN || {};
 
 VIN.App = function()
 {
+  this.cart = new VIN.Cart(this);
   this.pin = 0;
   this.fileSystem = null;
   this.bindEvents();
@@ -81,6 +82,8 @@ VIN.App.prototype =
 
   bindEvents: function()
   {
+    var that = this;
+
     $('.voci [data-cont=catalogo]').click(function(){
       var subMenu = $('.voci .submenu');
 
@@ -95,6 +98,13 @@ VIN.App.prototype =
       else
         subMenu.height(0);
     });
+
+    // handle close functionality for all overlays
+    $('.overlay button.close').bind('tap', function(){
+      $(this).parents('.overlay').hide();
+    });
+
+    this.cart.bindEvents();
   },
 
   writePIN: function(pin, cb)

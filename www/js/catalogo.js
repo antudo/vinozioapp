@@ -5,6 +5,12 @@
  */
 
 var prices = [] // hashTable to store prices associated to different product size
+
+var selectedProduct = { name: '' };
+var cart = [
+  // { name: '', quantity: 2, category: 'calice' }
+];
+
 /**
  *
  * @param query
@@ -315,8 +321,10 @@ function showProductPage(productId) {
             var prezzo =  storage_products_decodedJson.retail_price;
             var formato_disponibile =  storage_products_decodedJson.size;
 
-            prices['bottiglia'] = prezzo;
+            // update selected product
+            selectedProduct.name = product_name;
 
+            prices['bottiglia'] = prezzo;
 
             console.log("FORMATO" + formato_disponibile)
             var options = {
@@ -385,12 +393,15 @@ function showProductPage(productId) {
         }
         stop_carica();
         $('.content0').html(vinoDOM);
-        var product_selected = [];
+
+        // bottiglia is selected by default
+        var product_selected = ['bottiglia'];
+
         update_bind_cart();
         porta_su();
         bindGoBackButton();
         bindProductQtyButtons();
-        bindOrderNowButton();''
+        bindOrderNowButton(selectedProduct);
         bindProductSizeButtons();
 
     })
@@ -572,7 +583,7 @@ function bindProductSizeButtons() {
 /**
  * todo: da completare la logica per inserire l'ordine nel carrello
  */
-function bindOrderNowButton() {
+function bindOrderNowButton(product) {
     $('.btn-a').unbind("tap").bind("tap", function (e) {
         e.preventDefault();
         e.stopPropagation();
@@ -583,15 +594,13 @@ function bindOrderNowButton() {
         //todo : da inserire anche il nome del prodotto. Ricavarlo come productId e qtyToOrder, dalla scheda del prodotto
 
         var order_to_add = {
-            "product_size": product_selected[0],
-            "qty": qtyToOrder,
-            "productId": productId,
+            name: product.name,
+            product_size: product_selected[0],
+            qty: qtyToOrder,
+            productId: productId,
             price: prices[product_selected[0]],
             subtotal: prices[product_selected[0]] * qtyToOrder
-
-
         }
-
 
         console.log("****order_to_add****: " + JSON.stringify(order_to_add))
         addToCart(order_to_add);

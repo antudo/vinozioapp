@@ -27,3 +27,7 @@ platforms/ios/www/application_setup.json
 platforms/ios/www/js/app.js
 
 platforms/ios/www/js/config.js
+
+platforms/ios/www/js/lib/cart.js
+
+platforms/ios/www/images/close.png

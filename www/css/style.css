@@ -18,6 +18,12 @@
   font-style: normal;
 
 }
+
+img.responsive
+{
+  max-width: 100%;
+}
+
 .filColori{
 	width: 250px;
 	float: left;
@@ -2022,4 +2028,106 @@ background-color:#FFFFFF}
 .cameriere .sono.io{
 	background: #fff;
 	color: #000;
+}
+
+.overlay
+{
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  z-index: 1000;
+  color: #fff;
+  text-align: center;
+  font-family: "Alex Brush", sans-serif;
+}
+
+.overlay .logo
+{
+  width: 10%;
+  margin:auto;
+  margin-top: 50px;
+}
+
+.overlay h2,
+.overlay h3
+{
+  font-family: "Alex Brush", sans-serif;
+  text-transform: uppercase;
+  margin: 20px 0;
+}
+
+.overlay .alert
+{
+  margin-top: 50px;
+  margin-bottom: 30px;
+}
+
+.conferma-ordine .choice,
+.conferma-ordine p
+{
+  font-family: "Alex Brush", sans-serif;
+  color: #777;
+}
+
+.conferma-ordine .choice
+{
+  margin:0;
+  padding:0;
+  margin-top: 20px;
+}
+
+.conferma-ordine .choice li
+{
+  font-family: "Alex Brush", sans-serif;
+  margin-bottom: 5px;
+}
+
+.overlay input[type="password"]
+{
+  text-align: center;
+  width: 370px;
+  font-size: 2em;
+  outline: none;
+  height: 50px;
+  line-height: 50px;
+  margin-bottom: 20px;
+}
+
+button.no-styles
+{
+  background: none;
+  border: none;
+  outline: none;
+}
+
+.overlay button
+{
+  font-family: "Alex Brush", sans-serif;
+  cursor: pointer;
+  border-radius: 3px;
+  background: none;
+  border: 2px solid #777;
+  padding: 30px 50px;
+  text-transform: uppercase;
+  color: #777;
+  font-size: 1.5em;
+  outline: none;
+  line-height: 1em;
+}
+
+.overlay button.close
+{
+  background-image: url('../images/close.png');
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  padding: 0;
 }
