@@ -325,6 +325,7 @@ function showProductPage(productId) {
 
             // update selected product
             selectedProduct.name = product_name;
+            selectedProduct.productId = storage_products_decodedJson.productId;
 
             prices['bottiglia'] = prezzo;
 
@@ -600,7 +601,7 @@ function bindOrderNowButton(product) {
             name: product.name,
             product_size: product_selected[0],
             qty: qtyToOrder,
-            productId: productId,
+            productId: product.productId,
             price: prices[product_selected[0]],
             subtotal: prices[product_selected[0]] * qtyToOrder
         }
