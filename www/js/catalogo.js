@@ -11,6 +11,8 @@ var cart = [
   // { name: '', quantity: 2, category: 'calice' }
 ];
 
+var product_selected = [];
+
 /**
  *
  * @param query
@@ -395,7 +397,8 @@ function showProductPage(productId) {
         $('.content0').html(vinoDOM);
 
         // bottiglia is selected by default
-        var product_selected = ['bottiglia'];
+        product_selected = ['bottiglia'];
+        $('.bottiglia').addClass('sel');
 
         update_bind_cart();
         porta_su();

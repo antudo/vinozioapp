@@ -30,7 +30,7 @@ function onConfirm() {
         $('.cartArea table').attr('data-tot', "0");
         close_cart();
         stop_carica();
-        $('.ordina').unbind("tap");
+        // $('.ordina').unbind("tap");
         $('.cameriere').fadeOut();
         $('.sono').removeClass('io');
         init_tour();
@@ -46,7 +46,7 @@ function onConfirm() {
         $('.cartArea table').html('');
         //$('.totaleVal span').html('0.00');
         $('.cartArea table').attr('data-tot', "0");
-        $('.ordina').unbind("tap");
+        // $('.ordina').unbind("tap");
         $('.sono').removeClass('io');
 
     });
@@ -157,6 +157,8 @@ function update_bind_cart() {
 
         });
     });
+
+    vin.cart.bindEvents();
 }
 
 
@@ -201,7 +203,7 @@ function renderCart(productJustAdded) {
     var qty = productJustAdded.qty;
     var price = productJustAdded.price;
     var subtotal = productJustAdded.subtotal;
-    var product_name = 'DA METTERE'
+    var product_name = productJustAdded.name; 
     var totale='';
 
     var cartDOM = '<tr data-tipo="' + product_size + '" data-id-v="' + productId + '" data-qnt="' + qty + '" data-prezzo="' + parseFloat(parseFloat(price).toFixed(2) * qty).toFixed(2) + '">\

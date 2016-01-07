@@ -12,7 +12,9 @@ VIN.Cart.prototype = {
   {
     var that = this;
 
-    $('.cartArea .ordina').bind('tap', function(){
+    $('.cartArea .ordina').unbind('tap').bind('tap', function(){
+      console.log('### ENTER ORDINA ');
+
       // store_product is an array containing
       // all the product added to the cart (see carrello.js)
       // TODO: wrap the array inside this class and totally remove carrello.js,
@@ -37,22 +39,26 @@ VIN.Cart.prototype = {
       $('.overlay.conferma-ordine').show();
     });
 
-    $('.overlay.conferma-ordine button.cta').bind('tap', function(){
+    $('.overlay.conferma-ordine button.cta').unbind('tap').bind('tap', function(){
       $('.overlay.validate-pin').show();
     });
 
-    $('.overlay.validate-pin button.send').bind('tap',function(){
-      var pinEntered = $('.overlay.validate-pin input').val();
+    $('.overlay.validate-pin button.send').unbind('tap').bind('tap',function(){
+      var pinEntered = $('.overlay.validate-pin input.pin').val();
+      var tableName = $('.overlay.validate-pin input.table-name').val();
 
       console.log("tapped on send button");
 
       // send order
       that.app.readPIN(function(pinExists, pin){
+        console.log(pinEntered);
+        console.log(pinExists);
+        console.log(pin);
         if(pinEntered == pin)
         {
           // TODO: remove this alert
           alert("Il pin è corretto, invio l'ordine");
-          that.sendOrder();
+          that.sendOrder(tableName);
         }
         else
         {
@@ -61,15 +67,52 @@ VIN.Cart.prototype = {
       });
     });
 
-    $('.overlay.validate-pin button.back').bind('tap', function(){
+    $('.overlay.validate-pin button.back').unbind('tap').bind('tap', function(){
       $('.overlay.validate-pin').hide();
       // $('.overlay.conferma-ordine').show();
     });
   },
 
-  sendOrder: function()
+  sendOrder: function(tableName)
   {
+    if(tableName === '')
+    {
+      alert("E' necessario inserire il nome del tavolo");
+      return;
+    }
+
     // TODO: write ajax function for sending order to server
     alert("Sending order...");
+
+    var products = [];
+
+    // process data
+    for (var i = 0; i < store_product.length; i++)
+    {
+      var prod = {};
+      prod.productId = store_product[i].productId;
+      prod.productQty = store_product[i].qty;
+      products.push(prod);
+    }
+
+    var data = {
+      products: JSON.stringify(products),
+      tableName: tableName // remove hardcoded value
+    }
+
+    var url = VIN.config.url.sendOrder;
+    var accessToken = window.localStorage.getItem("access_token");
+    sendAPIRequest(url, 'POST', data, accessToken, function (response) {
+      console.log(response);
+
+      if (response)
+      {
+        alert("L'ordine è stato inviato con successo.");
+      }
+      else
+      {
+        alert("Errore nell'invio della richiesta.");
+      }
+    });
   }
 }

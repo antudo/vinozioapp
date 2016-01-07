@@ -2086,11 +2086,12 @@ background-color:#FFFFFF}
   margin-bottom: 5px;
 }
 
-.overlay input[type="password"]
+.overlay input[type="password"],
+.overlay input[type="text"]
 {
   text-align: center;
   width: 370px;
-  font-size: 2em;
+  font-size: 1em;
   outline: none;
   height: 50px;
   line-height: 50px;

@@ -100,7 +100,7 @@ VIN.App.prototype =
     });
 
     // handle close functionality for all overlays
-    $('.overlay button.close').bind('tap', function(){
+    $('.overlay button.close').click(function(){
       $(this).parents('.overlay').hide();
     });
 
