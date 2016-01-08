@@ -95,13 +95,15 @@ VIN.Cart.prototype = {
       products.push(prod);
     }
 
-    var data = {
-      products: JSON.stringify(products),
-      tableName: tableName // remove hardcoded value
-    }
-
     var url = VIN.config.url.sendOrder;
     var accessToken = window.localStorage.getItem("access_token");
+
+    var data = {
+      products: JSON.stringify(products),
+      tableName: tableName, // remove hardcoded value
+      myaccesstoken: accessToken
+    }
+
     sendAPIRequest(url, 'POST', data, accessToken, function (response) {
       console.log(response);
 

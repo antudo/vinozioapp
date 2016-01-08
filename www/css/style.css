@@ -52,6 +52,18 @@ img.responsive
 	background-position: center center;
 	background-size: cover;
 	border: 1px solid #9c243f;
+  position: relative;
+  margin-right: 5px;
+}
+.filColori div:not(.legend) span{
+  position: absolute;
+  bottom: -17px;
+  font-size: 10px;
+  text-transform: uppercase;
+  text-align: center;
+  width: 150%;
+  left: 50%;
+  transform: translateX(-50%);
 }
 .filColori .red{
 	background-color: #ff3761;
@@ -97,6 +109,17 @@ img.responsive
 	border-radius: 5px;
 	float: left;
 	margin-left: 10px;
+  position: relative;
+}
+.fbot div:not(.legend) span{
+  position: absolute;
+  bottom: -17px;
+  font-size: 10px;
+  text-transform: uppercase;
+  text-align: center;
+  width: 150%;
+  left: 50%;
+  transform: translateX(-50%);
 }
 .fbot .bottiglia.sel{
 	background: url(../images/bottigliab.png) center center no-repeat;
@@ -553,7 +576,7 @@ body{
 }
 .barra{
 	background: #fff;
-	height: 30px;
+	height: 40px;
 	padding: 2em 0px 2em 0px;
 	width: 100%;
 	position: fixed;

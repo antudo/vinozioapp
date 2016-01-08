@@ -48,16 +48,16 @@ function init_catalogo(query, selezionato) {
             </div>\
                 <div data-filter="header-filter" class="filColori">\
                     <div class="legend">Tipo di vino</div>\
-                    <div data-colore="Vino Rosso" class="red"></div>\
-                    <div data-colore="Vino Bianco" class="white"></div>\
-                    <div data-colore="Spumante" class="spum"></div>\
-                    <div data-colore="Vino Rosato" class="rosa"></div>\
+                    <div data-colore="Vino Rosso" class="red"><span>rosso</span></div>\
+                    <div data-colore="Vino Bianco" class="white"><span>bianco</span></div>\
+                    <div data-colore="Spumante" class="spum"><span>spumante</span></div>\
+                    <div data-colore="Vino Rosato" class="rosa"><span>rosato</span></div>\
                 </div>\
                 <div data-filter="header_bottles" class="fbot">\
                     <div class="legend">Formato</div>\
-                    <div class="bottiglia"></div>\
-                    <div class="mezzo"></div>\
-                    <div class="calice"></div>\
+                    <div class="bottiglia"><span>0.75cl</span></div>\
+                    <div class="mezzo"><span>0.50cl</span></div>\
+                    <div class="calice"><span>calice</span></div>\
                 </div>\
             </div>\
             </div>\
