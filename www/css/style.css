@@ -64,6 +64,7 @@ img.responsive
   width: 150%;
   left: 50%;
   transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
 }
 .filColori .red{
 	background-color: #ff3761;
@@ -120,6 +121,7 @@ img.responsive
   width: 150%;
   left: 50%;
   transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
 }
 .fbot .bottiglia.sel{
 	background: url(../images/bottigliab.png) center center no-repeat;
