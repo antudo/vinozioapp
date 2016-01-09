@@ -99,8 +99,8 @@ VIN.Cart.prototype = {
     var accessToken = window.localStorage.getItem("access_token");
 
     var data = {
-      products: JSON.stringify(products),
-      tableName: tableName, // remove hardcoded value
+      products: products,
+      tableName: tableName,
       myaccesstoken: accessToken
     }
 
@@ -110,6 +110,8 @@ VIN.Cart.prototype = {
       if (response)
       {
         alert("L'ordine è stato inviato con successo.");
+        $('.overlay.validate-pin').hide();
+        $('.overlay.conferma-ordine').hide();
       }
       else
       {
